@@ -1,0 +1,14 @@
+@import url(button.css);
+
+.add-item {
+    margin: -0.25rem;
+    display: flex;
+}
+
+.add-item > * {
+    margin: 0.125rem;
+}
+
+.add-item > input[type="text"] {
+    flex-grow: 1;
+}

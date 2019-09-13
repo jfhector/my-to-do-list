@@ -1,0 +1,28 @@
+@import url(_normalize.css);
+@import url(_defaults.css);
+@import url(_variables.css);
+@import url(_utilities.css);
+@import url(modules/todo-list.css);
+@import url(modules/add-item.css);
+
+body {
+    margin: 1rem;
+}
+
+button[type="submit"] {
+    padding: 0.5rem;
+    border: 0.25rem solid black;
+    border-radius: 0.25rem;
+    background-color: black;
+    color: white;
+}
+
+input[type="text"] {
+    border: 0.25rem solid black;
+    padding: 0.5rem;
+    border-radius: 0.125rem;
+}
+
+.stack > * + * {
+    margin-top: 1rem;
+}

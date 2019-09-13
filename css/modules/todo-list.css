@@ -1,0 +1,50 @@
+.todo-list > .stack > ul {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    max-width: 24rem;
+}
+
+.todo-list__empty-state-panel {
+    display: none;
+}
+
+.todo-list > .stack > ul:empty + .todo-list__empty-state-panel {
+    display: block;
+    padding: 0.5rem;
+    border: 0.25rem solid black;
+    border-radius: 0.25rem;
+    max-width: max-content;
+}
+
+.todo-list__item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid black;
+}
+
+.todo-list__item > span[id$="-label"] {
+    max-width: 35ch;
+    margin-left: 0.5rem;
+    margin-right: auto;
+}
+
+.todo-list__item > input[type="checkbox"]:checked + span[id$="-label"] {
+    text-decoration: line-through;
+}
+
+.todo-list__item > button {
+    background-color: white;
+    margin-left: 1rem;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    border: none;
+}
+
+.todo-list__item > button > img {
+    height: 1.5rem;
+}
+
+/* TODO: Use the cluster pattern to and/or sidebar pattern to make the add button wrap nicely */

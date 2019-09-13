@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <meta charset="utf-8">
+    <title>Boilerplate</title>
+    <link type="text/css" rel="stylesheet" href="./css/main.css">
+    <script defer src="js/main.js"></script>
+</head>
+
+<body>
+    <h1>My Todo List</h1>
+
+    <div class="todo-list" data-module="todo-list">
+        <div class="stack">
+            <ul>
+                <li class="todo-list__item">
+                    <input type="checkbox" aria-labelledby="item1-checkbox-label">
+                    <span id="item1-checkbox-label">Pick up kids from school</span>
+                    <button type="button">
+                        <span class="!visually-hidden">Delete</span>
+                        <img src="assets/bin-icon.svg">
+                    </button>
+                </li>
+
+                <li class="todo-list__item">
+                    <input type="checkbox" aria-labelledby="item2-checkbox-label">
+                    <span id="item2-checkbox-label">Pick up kids from school up kids from school</span>
+                    <button type="button">
+                        <span class="!visually-hidden">Delete</span>
+                        <img src="assets/bin-icon.svg">
+                    </button>
+                </li>
+            </ul>
+        
+            <div class="todo-list__empty-state-panel">
+                Either you've done everything already or there are still things to add to your list.
+                <br>Add your first todo
+            </div>
+        
+            <div class="add-item">
+                <label for="new-todo-input" class="!visually-hidden">New todo item</label>
+                <input type="text" id="new-todo-input" placeholder="E.g. Adopt an owl">
+                <button type="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
