@@ -19,10 +19,12 @@ button[type="submit"] {
     color: white;
 }
 
-button[type="submit"]:hover,
-button[type="submit"]:focus {
+button[type="submit"]:hover {
     top: -1px;
     left: -1px;
+}
+
+button[type="submit"]:focus {
     outline: 0.125rem solid transparent;
     box-shadow: 
         0 0 0 0.125rem #DF61E3,
