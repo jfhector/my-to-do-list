@@ -61,5 +61,3 @@
 .todo-list__item > button > img {
     height: 1.5rem;
 }
-
-/* TODO: Use the cluster pattern to and/or sidebar pattern to make the add button wrap nicely */
