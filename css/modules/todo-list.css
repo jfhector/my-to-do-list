@@ -37,10 +37,13 @@
 
 .todo-list__item > button {
     background-color: white;
-    margin-left: 1rem;
     min-width: 2.5rem;
     min-height: 2.5rem;
-    border: none;
+    box-shadow: none;
+}
+
+.todo-list__item > button:focus {
+    box-shadow: 0 0 0 0.125rem #DF61E3;
 }
 
 .todo-list__item > button > img {
