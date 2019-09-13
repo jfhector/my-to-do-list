@@ -120,7 +120,6 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId) {
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 
-// Can I get the focus management for free if the checkboxes are in a fieldset??
 // TODO: Add edit button for each item
 // TODO: When click/tap on a list item, it gets focused.
     // The background colour changes slightly
