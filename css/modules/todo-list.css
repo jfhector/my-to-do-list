@@ -36,13 +36,20 @@
 }
 
 .todo-list__item > button {
+    opacity: 0;
+}
+
+.todo-list__item:hover > button,
+.todo-list__item:focus-within > button {
+    transition: opacity ease-in 300ms;
+    opacity: 1;
     background-color: white;
     min-width: 2.5rem;
     min-height: 2.5rem;
     box-shadow: none;
 }
 
-.todo-list__item > button:focus {
+.todo-list__item:focus-within > button:focus {
     box-shadow: 0 0 0 0.125rem #DF61E3;
 }
 

@@ -120,4 +120,10 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId) {
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 
+// Can I get the focus management for free if the checkboxes are in a fieldset??
 // TODO: Add edit button for each item
+// TODO: When click/tap on a list item, it gets focused.
+    // The background colour changes slightly
+    // Delete button appears (and maybe edit button)
+    // Enter and space keys are directed to the checkbox (or directly check the checkbox, but that means capturing a different event)
+// TODO: Add keyboard handling for up and down arrows to go between todo lists using the roving index method. Respond to up and down arrows not just when th efocus is on the checkbox but also when it's anywhere on a todo list item
