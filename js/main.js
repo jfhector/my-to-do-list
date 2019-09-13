@@ -49,14 +49,11 @@ TodoList.prototype.init = function() {
                 // stop progagation of the event
                 // reset the value of $addItemInput
 
-        // if the submit event comes from one of the list items (using node.matches)
-            // Somehow blur that input??
-
-    // Listen for click events on the edit button
-        // 
-
-    // on each list item's input field,
-        // listen for 'enter' event
+    // Listen for 'input' events
+        // See which contenteditable div the input comes from
+        // Get the relevant itemid
+        // call updateTodoItemLabel(todoItemId, newLabel)
+            // if returned successfully stop propagation
 }
 
 TodoList.prototype.addTodoItem = function(todoItemLabel) {
@@ -89,16 +86,15 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newState
 }
 
 TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
-    // TODO: add an event listener
-
     // Return true on success, or false on otherwise
-
+    
     // Use array map to update this._todoItems, changing label of the correspondong item
-
+    
     // update localStorage
-
-    // call renderTodoItemLabel(todoItem)
+    
+    // call renderTodoItemLabelUpdate(todoItemId)
 }
+
 
 TodoList.prototype.renderAllTodoItems = function() {
     // create a fragment
@@ -108,21 +104,17 @@ TodoList.prototype.renderAllTodoItems = function() {
     // append the fragment to the ul
 }
 
-TodoList.prototype.deleteTodoItemNode = function(todoItemId) {
+TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
         // try to get the node corresponding to todoItemId
         // if there is one, delete it
 }
 
-TodoList.prototype.updateTodoItemLabel = function(todoItemId) {
-    // TODO: add an event listener
+TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {
+    // try to get the node corresponding to todoItemId
+    // if there is one, update the inner text
 }
 
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 
-// TODO: Add edit button for each item
-// TODO: When click/tap on a list item, it gets focused.
-    // The background colour changes slightly
-    // Delete button appears (and maybe edit button)
-    // Enter and space keys are directed to the checkbox (or directly check the checkbox, but that means capturing a different event)
 // TODO: Add keyboard handling for up and down arrows to go between todo lists using the roving index method. Respond to up and down arrows not just when th efocus is on the checkbox but also when it's anywhere on a todo list item

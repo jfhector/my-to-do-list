@@ -28,7 +28,7 @@ button:hover {
 button:focus {
     outline: 0.125rem solid transparent;
     box-shadow: 
-        0 0 0 0.125rem #DF61E3,
+        0 0 0 0.125rem #E24AE6,
         inset 0 -2px #ccc,    
         1px 1px 2px #ccc;
 }
@@ -46,7 +46,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     outline: 0.125rem solid transparent;
-    box-shadow: 0 0 0 0.125rem #DF61E3;
+    box-shadow: 0 0 0 0.125rem #E24AE6;
 }
 
 .stack > * + * {

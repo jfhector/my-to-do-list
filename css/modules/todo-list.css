@@ -26,14 +26,25 @@
 .todo-list__item {
     display: flex;
     align-items: center;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0.25rem;
     border-bottom: 1px solid black;
 }
 
+.todo-list__item:focus-within {
+    background-color: #FFF2FF;
+}
+
 .todo-list__item > span[id$="-label"] {
+    padding: 0.125rem;
     max-width: 35ch;
     margin-left: 0.5rem;
     margin-right: auto;
+    border-radius: 0.1  25rem;
+}
+
+.todo-list__item > span[id$="-label"]:focus {
+    outline: 0.125rem solid transparent;
+    box-shadow: 0 0 0 0.125rem #E24AE6;
 }
 
 .todo-list__item > input[type="checkbox"]:checked + span[id$="-label"] {
@@ -41,21 +52,21 @@
 }
 
 .todo-list__item > button {
-    opacity: 0;
+    opacity: 0.00001;
 }
 
 .todo-list__item:hover > button,
 .todo-list__item:focus-within > button {
     transition: opacity ease-in 300ms;
     opacity: 1;
-    background-color: white;
+    background-color: transparent;
     min-width: 2.5rem;
     min-height: 2.5rem;
     box-shadow: none;
 }
 
 .todo-list__item:focus-within > button:focus {
-    box-shadow: 0 0 0 0.125rem #DF61E3;
+    box-shadow: 0 0 0 0.125rem #E24AE6;
 }
 
 .todo-list__item > button > img {
