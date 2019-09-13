@@ -39,6 +39,8 @@ TodoList.prototype.init = function() {
             // stop progagation of the event
 
     // Listen for 'submit' events
+        // preventDefault
+
         // if the submit event comes from the $addItemInput
             // get the value of $addItemInput
             // call add todo with that value
@@ -120,4 +122,3 @@ const todoList = new TodoList($todoList);
 
 // TODO: triggering 'submit' with enter requires a form element. Add it. And the 'submit' event is triggered on the 'form' event
 // TODO: Add edit button for each item
-// TODO: Source control

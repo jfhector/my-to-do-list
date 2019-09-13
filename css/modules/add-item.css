@@ -2,6 +2,7 @@
 
 .add-item {
     margin: -0.25rem;
+    max-width: 44ch;
     display: flex;
 }
 
@@ -11,4 +12,5 @@
 
 .add-item > input[type="text"] {
     flex-grow: 1;
+    flex-shrink: 1;
 }
