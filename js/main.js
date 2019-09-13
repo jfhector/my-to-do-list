@@ -120,5 +120,4 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId) {
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 
-// TODO: triggering 'submit' with enter requires a form element. Add it. And the 'submit' event is triggered on the 'form' event
 // TODO: Add edit button for each item
