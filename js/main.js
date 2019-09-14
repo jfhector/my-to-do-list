@@ -5,6 +5,31 @@ const utilities = {
         } else {
             return utilities.findElementUpstream(startElement.parentNode, selector); // LESSON: Don't forget to return the recursive call to the function
         }
+    },
+
+    storageAvailable: (storageType) => {
+        var storage;
+        try {
+            storage = window[storageType];
+            var x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch(e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                (storage && storage.length !== 0);
+        }
     }
 }
 function IDGenerator() {
@@ -29,7 +54,6 @@ function IDGenerator() {
         return id;
     }   
 }
-
 const idGen = new IDGenerator();
 
 const TodoList = function($module) {
@@ -46,19 +70,21 @@ const TodoList = function($module) {
 
 TodoList.prototype.init = function() {
 
-    if (localStorage.getItem('_todoItems')) {
-        this._todoItems = JSON.parse(localStorage.getItem('_todoItems')); 
-    }
-    if (localStorage.getItem('_touchEventDetected')) {
-        this._touchEventDetected = localStorage.getItem('_touchEventDetected');
+    if (utilities.storageAvailable('localStorage')) {
+        if (localStorage.getItem('_todoItems')) {
+            this._todoItems = JSON.parse(localStorage.getItem('_todoItems')); 
+        }
+        if (localStorage.getItem('_touchEventDetected')) {
+            this._touchEventDetected = localStorage.getItem('_touchEventDetected');
+        }
     }
 
     this.renderAllTodoItems();
     
-    // given that there hasn't been a touch event at any time
-    // after 10 seconds have passed after page load,
-    // apply the allow-hiden-buttons class
     window.addEventListener('load', () => {
+        // given that there hasn't been a touch event at any time
+        // after 10 seconds have passed after page load,
+        // apply the allow-hiden-buttons class
         setTimeout(() => {
             if (!(this._touchEventDetected === 'true')) {
                 this.$module.classList.add('allow-hiden-buttons');
@@ -66,10 +92,10 @@ TodoList.prototype.init = function() {
         }, 10000);
     });
 
-    // remove any allow-hiden-buttons class as soon as a touch event is detected
     window.addEventListener('touchstart', (e) => {
+        // remove any allow-hiden-buttons class as soon as a touch event is detected
         this._touchEventDetected = 'true';
-        localStorage.setItem('_touchEventDetected', this._touchEventDetected);
+        if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_touchEventDetected', this._touchEventDetected); }
         this.$module.classList.remove('allow-hiden-buttons');
     });
 
@@ -87,7 +113,6 @@ TodoList.prototype.init = function() {
     });
 
     this.$module.addEventListener('change', (e) => {
-
         if (e.srcElement.matches('li[data-item-id] input[type="checkbox"]')) {
             const idOfCorrespondingTodoItem = e.srcElement.parentNode.dataset.itemId;
             const newCompletionState = e.srcElement.checked ? 'done' : 'not-done';
@@ -146,7 +171,7 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     };
 
     this._todoItems.current.push(newTodoItem);
-    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
+    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
     this.renderAllTodoItems();
     return true;
@@ -162,7 +187,7 @@ TodoList.prototype.deleteTodoItem = function(todoItemId) {
         }
     });
 
-    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
+    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
     this.renderTodoItemDeletion(todoItemId);
     return true;
@@ -174,7 +199,7 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompl
         if (todoItemInState.id === todoItemId) { todoItemInState.completionState = newCompletionState }
     });
 
-    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
+    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
     return true;
 }
@@ -184,8 +209,9 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
         if (todoItemInState.id === todoItemId) { todoItemInState.label = newLabel }
     });
 
-    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
-
+    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
+    
+    this.renderToDoItemLabelUpdate(todoItemId, newLabel);
     return true;
 }
 
@@ -196,7 +222,7 @@ TodoList.prototype.renderAllTodoItems = function() {
             <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' ? 'checked' : ''}>
             <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
             <button type="button" class="button--secondary js-todo-delete-button">
-                <span class="!visually-hidden">Delete</span>
+                <span class="!visually-hidden">Delete to do item named ${label}</span>
                 <img src="assets/bin-icon.svg" draggable="false">
             </button>
         </li>
@@ -213,9 +239,10 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     nodeToBeDeleted.remove();
 }
 
-// I don't need to do this, as the view is already in sync with the model.
-// Q: If I had done, I wonder whether editing the text would still be seamless
-// TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {}
+TodoList.prototype.renderToDoItemLabelUpdate = function(todoItemId, newLabel) {
+    const nodeToBeUpdated = this.$list.querySelector(`li[data-item-id="${todoItemId}"] .js-todo-delete-button > span`);
+    nodeToBeUpdated.textContent = `Delete to do item named ${newLabel}`
+}
 
 // IN DEV
 const $todoList = document.querySelector('[data-module="todo-list"]');

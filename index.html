@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta charset="utf-8">
-    <title>My Todo List</title>
+    <title>My To do List</title>
     <link type="text/css" rel="stylesheet" href="./css/main.css">
     <script defer src='https://unpkg.com/focus-within-polyfill/dist/focus-within-polyfill.js'></script>
     <script defer src="js/main.js"></script>
@@ -11,7 +11,7 @@
 
 <body>
     <section class="todo-list" data-module="todo-list" aria-labelledby="todo-list-header">
-        <h1 id="todo-list-header">My Todo List</h1>
+        <h1 id="todo-list-header">My To Do List</h1>
 
         <div class="stack">
             <ul></ul>
@@ -22,29 +22,14 @@
             </div>
         
             <div class="add-item">
-                <label for="new-todo-input" class="!visually-hidden">New todo item</label>
+                <label for="new-todo-input" class="!visually-hidden">New to do item</label>
                 <input type="text" id="new-todo-input" placeholder="E.g. Adopt an owl" size="1" autocomplete="off">
-                <button type="button" class="js-add-item-button">Add</button>
+                <button type="button" class="js-add-item-button">
+                    Add
+                    <span class="!visually-hidden">to do item</span>
+                </button>
             </div>
         </div>
     </section>
 </body>
 </html>
-
-<!-- <li class="todo-list__item">
-    <input type="checkbox" aria-labelledby="item1-checkbox-label">
-    <span id="item1-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school</span>
-    <button type="button" class="button--secondary">
-        <span class="!visually-hidden">Delete</span>
-        <img src="assets/bin-icon.svg" draggable="false">
-    </button>
-</li>
-
-<li class="todo-list__item">
-    <input type="checkbox" aria-labelledby="item2-checkbox-label">
-    <span id="item2-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school up kids from school</span>
-    <button type="button" class="button--secondary">
-        <span class="!visually-hidden">Delete</span>
-        <img src="assets/bin-icon.svg" draggable="false">
-    </button>
-</li> -->
