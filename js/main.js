@@ -71,12 +71,14 @@ TodoList.prototype.init = function() {
             // TODO
 
     // Listen for 'change' events
-        // Make sure that what emited the change event is a checkbox from one of the items
-        // get the new 'checked' state of the checkbox
-        // use event.target to get the corresponding todoItemId
-        // call updateTodo with that id and the new state
-        // if updateTodoItemCompletionState function returned true
-            // stop progagation of the event
+    this.$module.addEventListener('change', (e) => {
+
+        if (e.srcElement.matches('li[data-item-id] input[type="checkbox"]')) {
+            const idOfCorrespondingTodoItem = e.srcElement.parentNode.dataset.itemId;
+            const newCompletionState = e.srcElement.checked ? 'done' : 'not-done';
+            this.updateTodoItemCompletionState(idOfCorrespondingTodoItem, newCompletionState) && e.stopPropagation()
+        }
+    });
 
     this.$module.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -150,8 +152,8 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
 
 TodoList.prototype.renderAllTodoItems = function() {
     const generateTodoItemHTML = (id, label, completionState) => `
-        <li class="todo-list__item">
-            <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' && 'checked'}>
+        <li class="todo-list__item" data-item-id="${id}">
+            <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' ? 'checked' : ''}>
             <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
             <button type="button" class="button--secondary">
                 <span class="!visually-hidden">Delete</span>
