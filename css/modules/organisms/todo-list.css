@@ -25,7 +25,7 @@
 .todo-list__item {
     display: flex;
     align-items: center;
-    min-height: 4rem;
+    /* min-height: 4rem; TODO Maybe put this back*/
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid black;
 }
@@ -51,17 +51,14 @@
     text-decoration: line-through;
 }
 
-.todo-list__item > button {
-    display: none;
-    position: absolute;
-    left: 10000rem;
-    top: 10000rem;
+/* If an element has visibility hidden, it can't be clicked/touched on by humans */
+.todo-list:not(.force-buttons-visible) .js-todo-delete-button {
+    visibility: hidden;
 }
 
-.todo-list__item:hover > button,
-.todo-list__item:focus-within > button {
-    display: block;
-    position: static;
+.todo-list__item:hover > .js-todo-delete-button,
+.todo-list__item:focus-within > .js-todo-delete-button {
+    visibility: visible;
 }
 
 .todo-list__item > button > img {

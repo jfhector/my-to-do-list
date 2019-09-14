@@ -57,8 +57,11 @@ TodoList.prototype.init = function() {
     
     this.renderAllTodoItems();
 
-    this.$list.addEventListener('click', (e) => {
+    window.addEventListener('touchstart', (e) => {
+        this.$module.classList.add('force-buttons-visible');
+    });
 
+    this.$list.addEventListener('click', (e) => {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
 
             function findElementUpstream(startElement, selector) {
