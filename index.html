@@ -10,9 +10,8 @@
 </head>
 
 <body>
-    <form class="todo-list" data-module="todo-list">
-
-        <h1>My Todo List</h1>
+    <section class="todo-list" data-module="todo-list" aria-labelledby="todo-list-header">
+        <h1 id="todo-list-header">My Todo List</h1>
 
         <div class="stack">
             <ul></ul>
@@ -25,10 +24,10 @@
             <div class="add-item">
                 <label for="new-todo-input" class="!visually-hidden">New todo item</label>
                 <input type="text" id="new-todo-input" placeholder="E.g. Adopt an owl" size="1" autocomplete="off">
-                <button type="submit">Add</button>
+                <button type="button" class="js-add-item-button">Add</button>
             </div>
         </div>
-    </form>
+    </section>
 </body>
 </html>
 

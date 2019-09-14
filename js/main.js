@@ -25,8 +25,9 @@ const idGen = new IDGenerator();
 
 const TodoList = function($module) {
     this.$module = $module;
-    this.$newTodoInput = this.$module.querySelector('#new-todo-input');
     this.$list = this.$module.querySelector('ul'); // Q: Why does this.$list become undefined if I only set it in .init?
+    this.$newTodoInput = this.$module.querySelector('#new-todo-input');
+    this.$newTodoAddButton = this.$module.querySelector('.js-add-item-button');
     this._todoItems = {
         current: [
             {
@@ -70,7 +71,6 @@ TodoList.prototype.init = function() {
 
             // TODO
 
-    // Listen for 'change' events
     this.$module.addEventListener('change', (e) => {
 
         if (e.srcElement.matches('li[data-item-id] input[type="checkbox"]')) {
@@ -80,16 +80,27 @@ TodoList.prototype.init = function() {
         }
     });
 
-    this.$module.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const newToDoLabel = this.$newTodoInput.value;
+    this.$newTodoAddButton.addEventListener('click', (e) => {
+        debugger;
+        this.handleAddButtonClickAndInputEnterKey() && e.stopPropagation();
+    });
 
-        if(this.addTodoItem(newToDoLabel)) {
-            event.stopPropagation();
-            this.$newTodoInput.value = '';
+    this.$newTodoInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+            this.handleAddButtonClickAndInputEnterKey() && e.stopPropagation();
         }
     });
+
+    this.handleAddButtonClickAndInputEnterKey = function() {
+        const newToDoLabel = this.$newTodoInput.value;
+        
+        if(this.addTodoItem(newToDoLabel)) {
+            this.$newTodoInput.value = '';
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     // Listen for 'input' events
         // See which contenteditable div the input comes from
