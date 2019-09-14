@@ -53,11 +53,15 @@
 
 .todo-list__item > button {
     display: none;
+    position: absolute;
+    left: 10000rem;
+    top: 10000rem;
 }
 
 .todo-list__item:hover > button,
 .todo-list__item:focus-within > button {
     display: block;
+    position: static;
 }
 
 .todo-list__item > button > img {
