@@ -103,11 +103,11 @@ TodoList.prototype.init = function() {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
 
             // TODO: Refactor
-            const ancestorWithDataItemId = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
-            if (!ancestorWithDataItemId) { return false };
+            const correspondingTodoListItemNode = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
+            if (!correspondingTodoListItemNode) { return false };
 
-            const idOfItemToBeDeleted = ancestorWithDataItemId.dataset.itemId;
-            this.deleteTodoItem(idOfItemToBeDeleted);
+            const idOfItemToBeDeleted = correspondingTodoListItemNode.dataset.itemId;
+            this.deleteTodoItem(idOfItemToBeDeleted, correspondingTodoListItemNode);
             return true;
         }
     });
@@ -177,12 +177,14 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     return true;
 }
 
-TodoList.prototype.deleteTodoItem = function(todoItemId) {
+TodoList.prototype.deleteTodoItem = function(todoItemId, correspondingTodoListItemNode) {
+    const nextSiblingNodeBeforeDeletion = correspondingTodoListItemNode.nextElementSibling;
+
     this._todoItems.current = this._todoItems.current.filter(todoItem => {
         if (todoItem.id !== todoItemId) {
             return true;
         } else {
-            this._todoItems.deleted.push(todoItem);
+            this._todoItems.deleted.push(Object.assign(todoItem, { nextSiblingNodeBeforeDeletion: nextSiblingNodeBeforeDeletion }));
             return false;
         }
     });
