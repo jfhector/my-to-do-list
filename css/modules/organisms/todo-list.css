@@ -57,7 +57,6 @@
 
 .todo-list__item:hover > button,
 .todo-list__item:focus-within > button {
-    transition: opacity ease-in 300ms;
     opacity: 1;
 }
 

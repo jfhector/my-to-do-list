@@ -12,27 +12,10 @@
 <body>
     <form class="todo-list" data-module="todo-list">
 
-    <h1>My Todo List</h1>
-        <div class="stack">
-            <ul>
-                <li class="todo-list__item">
-                    <input type="checkbox" aria-labelledby="item1-checkbox-label">
-                    <span id="item1-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school</span>
-                    <button type="button" class="button--secondary">
-                        <span class="!visually-hidden">Delete</span>
-                        <img src="assets/bin-icon.svg" draggable="false">
-                    </button>
-                </li>
+        <h1>My Todo List</h1>
 
-                <li class="todo-list__item">
-                    <input type="checkbox" aria-labelledby="item2-checkbox-label">
-                    <span id="item2-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school up kids from school</span>
-                    <button type="button" class="button--secondary">
-                        <span class="!visually-hidden">Delete</span>
-                        <img src="assets/bin-icon.svg" draggable="false">
-                    </button>
-                </li>
-            </ul>
+        <div class="stack">
+            <ul></ul>
         
             <div class="todo-list__empty-state-panel">
                 Either you've done everything already or there are still things to add to your list.
@@ -41,13 +24,31 @@
         
             <div class="add-item">
                 <label for="new-todo-input" class="!visually-hidden">New todo item</label>
-                <input type="text" id="new-todo-input" placeholder="E.g. Adopt an owl" size="1">
+                <input type="text" id="new-todo-input" placeholder="E.g. Adopt an owl" size="1" autocomplete="off">
                 <button type="submit">Add</button>
             </div>
         </div>
     </form>
 </body>
 </html>
+
+<!-- <li class="todo-list__item">
+    <input type="checkbox" aria-labelledby="item1-checkbox-label">
+    <span id="item1-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school</span>
+    <button type="button" class="button--secondary">
+        <span class="!visually-hidden">Delete</span>
+        <img src="assets/bin-icon.svg" draggable="false">
+    </button>
+</li>
+
+<li class="todo-list__item">
+    <input type="checkbox" aria-labelledby="item2-checkbox-label">
+    <span id="item2-checkbox-label" role="textbox" contenteditable spellcheck="false">Pick up kids from school up kids from school</span>
+    <button type="button" class="button--secondary">
+        <span class="!visually-hidden">Delete</span>
+        <img src="assets/bin-icon.svg" draggable="false">
+    </button>
+</li> -->
 
 <!-- TODO: Add a button to undo last delete -->
 <!-- TODO: Add a button to delete X completed items -->

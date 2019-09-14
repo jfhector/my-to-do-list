@@ -3,18 +3,36 @@ const TodoList = function($module) {
     this.$addItemInput = undefined;
     this.$list = undefined;
     this._todoItems = {
-        current: [],
+        // current: [],
+        current: [
+            {
+                id: '23',
+                label: 'Buy a baseball hat',
+                completionStatus: 'not-done',
+            },
+            {
+                id: '24',
+                label: 'Shave and wash well',
+                completionStatus: 'done',
+            },
+            {
+                id: '25',
+                label: 'Play with the kids and everyone at diner',
+                completionStatus: 'not-done',
+            }
+        ],
         deleted: [],
     }
 }
 
 TodoList.prototype.init = function() {
-    // Get a reference to the input field, assign it to this.$addItemInput
-    // Get a reference to the ul element, assign it to this.$list
+    this.$newTodoInput = this.$module.querySelector('#new-todo-input');
+    this.$list = this.$module.querySelector('ul');
 
     // get any saved data from localStorage
         // if it to replace this._todoItems
-    // call renderAllTodoItems
+    
+    this.renderAllTodoItems();
 
     // Listen for click events
         // get event.target
@@ -59,7 +77,7 @@ TodoList.prototype.init = function() {
 TodoList.prototype.addTodoItem = function(todoItemLabel) {
     // Return true on success, or false on otherwise
 
-    // get a new unique todoItemId
+    // const newTodoItemId = Math.random * Math.pow(10,10);
     // add a object with that id and todoItemLabel to this._todoItems
     // update localStorage
     // call renderTodoItem
@@ -97,11 +115,21 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
 
 
 TodoList.prototype.renderAllTodoItems = function() {
-    // create a fragment
-    // for each element in this._todoItems.current
-        // create the right notes based on the data
-        // append to the fragment
-    // append the fragment to the ul
+    const generateTodoItemHTML = (id, label, completionStatus) => `
+        <li class="todo-list__item">
+            <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionStatus === 'done' && 'checked'}>
+            <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
+            <button type="button" class="button--secondary">
+                <span class="!visually-hidden">Delete</span>
+                <img src="assets/bin-icon.svg" draggable="false">
+            </button>
+        </li>
+    `;
+
+    this.$list.innerHTML = this._todoItems.current.reduce(
+        (accumulator, todoItem) => accumulator + generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionStatus),
+        ''
+    );
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
@@ -118,3 +146,9 @@ const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 
 // TODO: Add keyboard handling for up and down arrows to go between todo lists using the roving index method. Respond to up and down arrows not just when th efocus is on the checkbox but also when it's anywhere on a todo list item
+
+const todoListModules = document.querySelectorAll('[data-module="todo-list"]');
+Array.prototype.forEach.call(todoListModules, $todoListModule => {
+    const todoListModule = new TodoList($todoListModule);
+    todoListModule.init();
+});
