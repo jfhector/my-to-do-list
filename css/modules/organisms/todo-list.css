@@ -25,9 +25,11 @@
 .todo-list__item {
     display: flex;
     align-items: center;
-    /* min-height: 4rem; TODO Maybe put this back*/
+    min-height: 4rem;
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid black;
+    /* Note: for a transition to apply both way, it needs to be in a ruleset that still applies after the event */
+    transition: background-color 200ms ease-in-out;
 }
 
 .todo-list__item:focus-within {
@@ -51,14 +53,33 @@
     text-decoration: line-through;
 }
 
-/* If an element has visibility hidden, it can't be clicked/touched on by humans */
-.todo-list:not(.force-buttons-visible) .js-todo-delete-button {
-    visibility: hidden;
+/* If an element has visibility hidden, it can't be clicked/touched on by humans. Beware that an element with opacity 0 can still be touched/clicked */
+/* Note: it looks like, with `animation-fill-mode: forwards`, I can _only_ override the styles of the 100% state, if the ruleset that contains the animation doesn't apply to the element any more*/
+.todo-list.allow-hiden-buttons .todo-list__item:not(:hover):not(:focus-within) > .js-todo-delete-button {
+    animation: hideButtons 300ms ease-in-out;
+    animation-fill-mode: forwards;
 }
 
-.todo-list__item:hover > .js-todo-delete-button,
-.todo-list__item:focus-within > .js-todo-delete-button {
+@keyframes hideButtons {
+    0% {
+        opacity: 1;
+    }
+
+    99% {
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.todo-list .todo-list__item:hover > .js-todo-delete-button,
+.todo-list .todo-list__item:focus-within > .js-todo-delete-button {
     visibility: visible;
+    opacity: 1;
+    transition: opacity 200ms ease-in-out;
 }
 
 .todo-list__item > button > img {

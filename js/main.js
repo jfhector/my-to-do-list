@@ -57,8 +57,23 @@ TodoList.prototype.init = function() {
     
     this.renderAllTodoItems();
 
+    this._touchEventDetected = false;
+    
+    // given that there hasn't been a touch event at any time
+    // after 10 seconds have passed after page load,
+    // apply the allow-hiden-buttons class
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!this._touchEventDetected) {
+                this.$module.classList.add('allow-hiden-buttons');
+            }
+        }, 10000);
+    });
+
+    // remove any allow-hiden-buttons class as soon as a touch event is detected
     window.addEventListener('touchstart', (e) => {
-        this.$module.classList.add('force-buttons-visible');
+        this._touchEventDetected = true;
+        this.$module.classList.remove('allow-hiden-buttons');
     });
 
     this.$list.addEventListener('click', (e) => {
