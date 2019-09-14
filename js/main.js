@@ -1,3 +1,12 @@
+const utilities = {
+    findElementUpstream: (startElement, selector) => {
+        if (startElement.matches(selector)) {
+            return startElement;
+        } else {
+            return utilities.findElementUpstream(startElement.parentNode, selector); // LESSON: Don't forget to return the recursive call to the function
+        }
+    }
+}
 function IDGenerator() {
 	 
     this.length = 10;
@@ -79,14 +88,7 @@ TodoList.prototype.init = function() {
     this.$list.addEventListener('click', (e) => {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
 
-            function findElementUpstream(startElement, selector) {
-                if (startElement.matches(selector)) {
-                    return startElement;
-                } else {
-                    return findElementUpstream(startElement.parentNode, selector); // LESSON: Don't forget to return the recursive call to the function
-                }
-            }
-            const ancestorWithDataItemId = findElementUpstream(e.srcElement, 'li[data-item-id]');
+            const ancestorWithDataItemId = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
             if (!ancestorWithDataItemId) { return false };
 
             const idOfItemToBeDeleted = ancestorWithDataItemId.dataset.itemId;
@@ -127,10 +129,23 @@ TodoList.prototype.init = function() {
     }
 
     // Listen for 'input' events
-        // See which contenteditable div the input comes from
-        // Get the relevant itemid
-        // call updateTodoItemLabel(todoItemId, newLabel)
-            // if returned successfully stop propagation
+    this.$list.addEventListener('input', (e) => {
+
+        if (e.srcElement.matches('span[role="textbox"][contenteditable]')) {
+
+            // TODO: Refactor
+            const ancestorWithDataItemId = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
+            if (!ancestorWithDataItemId) { return false };
+
+            const idOfItemToBeDeleted = ancestorWithDataItemId.dataset.itemId;
+
+            const newLabel = e.srcElement.textContent;
+
+            if (this.updateTodoItemLabel(idOfItemToBeDeleted, newLabel)) {
+                e.stopPropagation();
+            }
+        }
+    });
 }
 
 TodoList.prototype.addTodoItem = function(todoItemLabel) {
@@ -178,13 +193,13 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompl
 }
 
 TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
-    // Return true on success, or false on otherwise
-    
-    // Use array map to update this._todoItems, changing label of the correspondong item
-    
+    this._todoItems.current.forEach(todoItemInState => {
+        if (todoItemInState.id === todoItemId) { todoItemInState.label = newLabel }
+    });
+
     // update localStorage
-    
-    // call renderTodoItemLabelUpdate(todoItemId)
+
+    return true;
 }
 
 
