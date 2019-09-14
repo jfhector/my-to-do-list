@@ -28,7 +28,7 @@ button:hover {
 button:focus {
     outline: 0.125rem solid transparent;
     box-shadow: 
-        0 0 0 0.125rem var(--focus-outline-colour),
+        0 0 0 0.125rem var(--focus-outline-color),
         inset 0 -2px var(--button-shadow-color),    
         1px 1px 2px var(--button-shadow-color);
 }

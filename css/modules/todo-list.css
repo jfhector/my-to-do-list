@@ -44,7 +44,7 @@
 
 .todo-list__item > span[id$="-label"]:focus {
     outline: 0.125rem solid transparent;
-    box-shadow: 0 0 0 0.125rem var(--focus-outline-colour);
+    box-shadow: 0 0 0 0.125rem var(--focus-outline-color);
 }
 
 .todo-list__item > input[type="checkbox"]:checked + span[id$="-label"] {
@@ -68,7 +68,9 @@
 }
 
 .todo-list__item:focus-within > button:focus {
-    box-shadow: 0 0 0 0.125rem var(--focus-outline-colour);
+    box-shadow: 0 0 0 0.125rem var(--focus-outline-color),
+    inset 0 -2px var(--button-shadow-color),    
+    1px 1px 2px var(--button-shadow-color);
 }
 
 .todo-list__item > button > img {
