@@ -14,7 +14,7 @@ button {
     padding: 0.5rem;
     border: none;
     border-radius: 0.25rem;
-    box-shadow: inset 0 -2px #ccc;
+    box-shadow: inset 0 -2px var(--button-shadow-color);
     background-color: black;
     color: white;
     cursor: pointer;
@@ -29,8 +29,8 @@ button:focus {
     outline: 0.125rem solid transparent;
     box-shadow: 
         0 0 0 0.125rem var(--focus-outline-colour),
-        inset 0 -2px #ccc,    
-        1px 1px 2px #ccc;
+        inset 0 -2px var(--button-shadow-color),    
+        1px 1px 2px var(--button-shadow-color);
 }
 
 button:active {
