@@ -78,16 +78,17 @@ TodoList.prototype.init = function() {
         // if updateTodoItemCompletionState function returned true
             // stop progagation of the event
 
-    // Listen for 'submit' events
-        // preventDefault
+    this.$module.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const newToDoLabel = this.$newTodoInput.value;
 
-        // if the submit event comes from the $addItemInput
-            // get the value of $addItemInput
-            // call add todo with that value
+        if(this.addTodoItem(newToDoLabel)) {
+            event.stopPropagation();
+            this.$newTodoInput.value = '';
+        }
+    });
 
-            // if addTodo function returned true
-                // stop progagation of the event
-                // reset the value of $addItemInput
 
     // Listen for 'input' events
         // See which contenteditable div the input comes from
