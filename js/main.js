@@ -37,43 +37,30 @@ const TodoList = function($module) {
     this.$list = this.$module.querySelector('ul'); // Q: Why does this.$list become undefined if I only set it in .init?
     this.$newTodoInput = this.$module.querySelector('#new-todo-input');
     this.$newTodoAddButton = this.$module.querySelector('.js-add-item-button');
+    this._touchEventDetected = undefined;
     this._todoItems = {
-        current: [
-            {
-                id: '23',
-                label: 'Buy a baseball hat',
-                completionState: 'not-done',
-            },
-            {
-                id: '24',
-                label: 'Shave and wash well',
-                completionState: 'done',
-            },
-            {
-                id: '25',
-                label: 'Play with the kids and everyone at diner',
-                completionState: 'not-done',
-            }
-        ],
+        current: [],
         deleted: [],
     }
 }
 
 TodoList.prototype.init = function() {
 
-    // get any saved data from localStorage
-        // if it to replace this._todoItems
-    
-    this.renderAllTodoItems();
+    if (localStorage.getItem('_todoItems')) {
+        this._todoItems = JSON.parse(localStorage.getItem('_todoItems')); 
+    }
+    if (localStorage.getItem('_touchEventDetected')) {
+        this._touchEventDetected = localStorage.getItem('_touchEventDetected');
+    }
 
-    this._touchEventDetected = false;
+    this.renderAllTodoItems();
     
     // given that there hasn't been a touch event at any time
     // after 10 seconds have passed after page load,
     // apply the allow-hiden-buttons class
     window.addEventListener('load', () => {
         setTimeout(() => {
-            if (!this._touchEventDetected) {
+            if (!(this._touchEventDetected === 'true')) {
                 this.$module.classList.add('allow-hiden-buttons');
             }
         }, 10000);
@@ -81,7 +68,8 @@ TodoList.prototype.init = function() {
 
     // remove any allow-hiden-buttons class as soon as a touch event is detected
     window.addEventListener('touchstart', (e) => {
-        this._touchEventDetected = true;
+        this._touchEventDetected = 'true';
+        localStorage.setItem('_touchEventDetected', this._touchEventDetected);
         this.$module.classList.remove('allow-hiden-buttons');
     });
 
@@ -108,7 +96,6 @@ TodoList.prototype.init = function() {
     });
 
     this.$newTodoAddButton.addEventListener('click', (e) => {
-        debugger;
         this.handleAddButtonClickAndInputEnterKey() && e.stopPropagation();
     });
 
@@ -159,8 +146,7 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     };
 
     this._todoItems.current.push(newTodoItem);
-
-    // TODO update localStorage
+    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
 
     this.renderAllTodoItems();
     return true;
@@ -176,7 +162,7 @@ TodoList.prototype.deleteTodoItem = function(todoItemId) {
         }
     });
 
-    // update localStorage
+    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
 
     this.renderTodoItemDeletion(todoItemId);
     return true;
@@ -188,7 +174,7 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompl
         if (todoItemInState.id === todoItemId) { todoItemInState.completionState = newCompletionState }
     });
 
-    // update localStorage
+    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
 
     return true;
 }
@@ -198,7 +184,7 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
         if (todoItemInState.id === todoItemId) { todoItemInState.label = newLabel }
     });
 
-    // update localStorage
+    localStorage.setItem('_todoItems', JSON.stringify(this._todoItems));
 
     return true;
 }
@@ -242,5 +228,3 @@ todoList.init();
 //     const todoListModule = new TodoList($todoListModule);
 //     todoListModule.init();
 // });
-
-// TODO: Add keyboard handling for up and down arrows to go between todo lists using the roving index method. Respond to up and down arrows not just when th efocus is on the checkbox but also when it's anywhere on a todo list item
