@@ -32,17 +32,17 @@ const TodoList = function($module) {
             {
                 id: '23',
                 label: 'Buy a baseball hat',
-                completionStatus: 'not-done',
+                completionState: 'not-done',
             },
             {
                 id: '24',
                 label: 'Shave and wash well',
-                completionStatus: 'done',
+                completionState: 'done',
             },
             {
                 id: '25',
                 label: 'Play with the kids and everyone at diner',
-                completionStatus: 'not-done',
+                completionState: 'not-done',
             }
         ],
         deleted: [],
@@ -89,7 +89,6 @@ TodoList.prototype.init = function() {
         }
     });
 
-
     // Listen for 'input' events
         // See which contenteditable div the input comes from
         // Get the relevant itemid
@@ -103,7 +102,7 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     const newTodoItem = {
         id: newTodoItemId,
         label: todoItemLabel,
-        completionStatus: 'not-done',
+        completionState: 'not-done',
     };
 
     this._todoItems.current.push(newTodoItem);
@@ -127,12 +126,15 @@ TodoList.prototype.deleteTodoItem = function(todoItemId) {
     // call renderTodoItem
 }
 
-TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newState) {
-    // Return true on success, or false on otherwise
-
-    // Use array map to update this._todoItems, changing 'done' state of the correspondong item
+TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompletionState) {
+    
+    this._todoItems.current.forEach(todoItemInState => {
+        if (todoItemInState.id === todoItemId) { todoItemInState.completionState = newCompletionState }
+    });
 
     // update localStorage
+
+    return true;
 }
 
 TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
@@ -147,9 +149,9 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
 
 
 TodoList.prototype.renderAllTodoItems = function() {
-    const generateTodoItemHTML = (id, label, completionStatus) => `
+    const generateTodoItemHTML = (id, label, completionState) => `
         <li class="todo-list__item">
-            <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionStatus === 'done' && 'checked'}>
+            <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' && 'checked'}>
             <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
             <button type="button" class="button--secondary">
                 <span class="!visually-hidden">Delete</span>
@@ -159,13 +161,9 @@ TodoList.prototype.renderAllTodoItems = function() {
     `;
 
     this.$list.innerHTML = this._todoItems.current.reduce(
-        (accumulator, todoItem) => accumulator + generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionStatus),
+        (accumulator, todoItem) => accumulator + generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionState),
         ''
     );
-
-    // this._todoItems.current.forEach(todoItem => {
-    //     this.$list.insertAdjacentHTML('beforeend', generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionStatus));
-    // });
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
@@ -178,13 +176,16 @@ TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {
     // if there is one, update the inner text
 }
 
+// IN DEV
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
+todoList.init();
+
+// IN PROD
+// const todoListModules = document.querySelectorAll('[data-module="todo-list"]');
+// Array.prototype.forEach.call(todoListModules, $todoListModule => {
+//     const todoListModule = new TodoList($todoListModule);
+//     todoListModule.init();
+// });
 
 // TODO: Add keyboard handling for up and down arrows to go between todo lists using the roving index method. Respond to up and down arrows not just when th efocus is on the checkbox but also when it's anywhere on a todo list item
-
-const todoListModules = document.querySelectorAll('[data-module="todo-list"]');
-Array.prototype.forEach.call(todoListModules, $todoListModule => {
-    const todoListModule = new TodoList($todoListModule);
-    todoListModule.init();
-});
