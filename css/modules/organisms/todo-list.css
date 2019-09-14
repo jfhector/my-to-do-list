@@ -8,7 +8,6 @@
     padding-left: 0;
     display: flex;
     flex-direction: column;
-    max-width: 24rem;
 }
 
 .todo-list__empty-state-panel {
@@ -26,6 +25,7 @@
 .todo-list__item {
     display: flex;
     align-items: center;
+    min-height: 4rem;
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid black;
 }
@@ -36,7 +36,7 @@
 
 .todo-list__item > span[id$="-label"] {
     padding: 0.125rem;
-    max-width: 35ch;
+    max-width: calc(100% - 4rem);
     margin-left: 0.5rem;
     margin-right: auto;
     border-radius: 0.1  25rem;
@@ -52,12 +52,12 @@
 }
 
 .todo-list__item > button {
-    opacity: 0.00001;
+    display: none;
 }
 
 .todo-list__item:hover > button,
 .todo-list__item:focus-within > button {
-    opacity: 1;
+    display: block;
 }
 
 .todo-list__item > button > img {
