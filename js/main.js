@@ -57,19 +57,25 @@ TodoList.prototype.init = function() {
     
     this.renderAllTodoItems();
 
-    // Listen for click events
-        // get event.target
+    this.$list.addEventListener('click', (e) => {
 
-        // if it's coming from a 'delete' button
-            // get the corresponding todoItemId
-            // call deleteTodo with that id
-            // if deleteTodo function returned true
-                // stop progagation of the event
+        if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
 
-        // if it's coming from a 'edit' button
-            // check its state: 'edit' or 'done' TODO
+            function findElementUpstream(startElement, selector) {
+                if (startElement.matches(selector)) {
+                    return startElement;
+                } else {
+                    return findElementUpstream(startElement.parentNode, selector); // LESSON: Don't forget to return the recursive call to the function
+                }
+            }
+            const ancestorWithDataItemId = findElementUpstream(e.srcElement, 'li[data-item-id]');
+            if (!ancestorWithDataItemId) { return false };
 
-            // TODO
+            const idOfItemToBeDeleted = ancestorWithDataItemId.dataset.itemId;
+            this.deleteTodoItem(idOfItemToBeDeleted);
+            return true;
+        }
+    });
 
     this.$module.addEventListener('change', (e) => {
 
@@ -123,20 +129,23 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     // TODO update localStorage
 
     this.renderAllTodoItems();
-
     return true;
 }
 
 TodoList.prototype.deleteTodoItem = function(todoItemId) {
-    // Return true on success, or false on otherwise
-
-    // Filter this._todoItems to exclude any item with todoItemId. Re-assign it to this._todoItems
-
-    // add that item to the deleted items array
+    this._todoItems.current = this._todoItems.current.filter(todoItem => {
+        if (todoItem.id !== todoItemId) {
+            return true;
+        } else {
+            this._todoItems.deleted.push(todoItem);
+            return false;
+        }
+    });
 
     // update localStorage
 
-    // call renderTodoItem
+    this.renderTodoItemDeletion(todoItemId);
+    return true;
 }
 
 TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompletionState) {
@@ -166,7 +175,7 @@ TodoList.prototype.renderAllTodoItems = function() {
         <li class="todo-list__item" data-item-id="${id}">
             <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' ? 'checked' : ''}>
             <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
-            <button type="button" class="button--secondary">
+            <button type="button" class="button--secondary js-todo-delete-button">
                 <span class="!visually-hidden">Delete</span>
                 <img src="assets/bin-icon.svg" draggable="false">
             </button>
@@ -180,8 +189,8 @@ TodoList.prototype.renderAllTodoItems = function() {
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
-        // try to get the node corresponding to todoItemId
-        // if there is one, delete it
+    const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
+    nodeToBeDeleted.remove();
 }
 
 TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {
