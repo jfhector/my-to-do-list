@@ -88,6 +88,7 @@ TodoList.prototype.init = function() {
     this.$list.addEventListener('click', (e) => {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
 
+            // TODO: Refactor
             const ancestorWithDataItemId = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
             if (!ancestorWithDataItemId) { return false };
 
@@ -226,10 +227,9 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     nodeToBeDeleted.remove();
 }
 
-TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {
-    // try to get the node corresponding to todoItemId
-    // if there is one, update the inner text
-}
+// I don't need to do this, as the view is already in sync with the model.
+// Q: If I had done, I wonder whether editing the text would still be seamless
+// TodoList.prototype.renderTodoItemLabelUpdate = function(todoItemId) {}
 
 // IN DEV
 const $todoList = document.querySelector('[data-module="todo-list"]');
