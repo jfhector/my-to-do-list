@@ -1,9 +1,33 @@
+function IDGenerator() {
+	 
+    this.length = 10;
+    this.timestamp = +new Date;
+    
+    var _getRandomInt = function( min, max ) {
+       return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+    }
+    
+    this.generate = function() {
+        var ts = this.timestamp.toString();
+        var parts = ts.split( "" ).reverse();
+        var id = "";
+        
+        for( var i = 0; i < this.length; ++i ) {
+           var index = _getRandomInt( 0, parts.length - 1 );
+           id += parts[index];	 
+        }
+        
+        return id;
+    }   
+}
+
+const idGen = new IDGenerator();
+
 const TodoList = function($module) {
     this.$module = $module;
-    this.$addItemInput = undefined;
-    this.$list = undefined;
+    this.$newTodoInput = this.$module.querySelector('#new-todo-input');
+    this.$list = this.$module.querySelector('ul'); // Q: Why does this.$list become undefined if I only set it in .init?
     this._todoItems = {
-        // current: [],
         current: [
             {
                 id: '23',
@@ -26,8 +50,6 @@ const TodoList = function($module) {
 }
 
 TodoList.prototype.init = function() {
-    this.$newTodoInput = this.$module.querySelector('#new-todo-input');
-    this.$list = this.$module.querySelector('ul');
 
     // get any saved data from localStorage
         // if it to replace this._todoItems
@@ -75,12 +97,21 @@ TodoList.prototype.init = function() {
 }
 
 TodoList.prototype.addTodoItem = function(todoItemLabel) {
-    // Return true on success, or false on otherwise
+    const newTodoItemId = idGen.generate().toString();
 
-    // const newTodoItemId = Math.random * Math.pow(10,10);
-    // add a object with that id and todoItemLabel to this._todoItems
-    // update localStorage
-    // call renderTodoItem
+    const newTodoItem = {
+        id: newTodoItemId,
+        label: todoItemLabel,
+        completionStatus: 'not-done',
+    };
+
+    this._todoItems.current.push(newTodoItem);
+
+    // TODO update localStorage
+
+    this.renderAllTodoItems();
+
+    return true;
 }
 
 TodoList.prototype.deleteTodoItem = function(todoItemId) {
@@ -130,6 +161,10 @@ TodoList.prototype.renderAllTodoItems = function() {
         (accumulator, todoItem) => accumulator + generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionStatus),
         ''
     );
+
+    // this._todoItems.current.forEach(todoItem => {
+    //     this.$list.insertAdjacentHTML('beforeend', generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionStatus));
+    // });
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
