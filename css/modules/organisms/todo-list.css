@@ -29,7 +29,7 @@
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid black;
     /* Note: for a transition to apply both way, it needs to be in a ruleset that still applies after the event */
-    transition: background-color 200ms ease-in-out;
+    /* transition: background-color 50ms ease-out; */
     will-change: transform;
 }
 
