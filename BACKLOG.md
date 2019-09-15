@@ -19,3 +19,5 @@
 * Redo using custom elements
 
 * find a way to set a CSS custom property from JS without using element.style
+
+* refactor this.$list.addEventListener('keyup', using try {}

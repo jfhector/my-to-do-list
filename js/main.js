@@ -115,11 +115,14 @@ TodoList.prototype.init = function() {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
             // TODO: Refactor
             const correspondingTodoListItemNode = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
-            if (!correspondingTodoListItemNode) { return false };
-
             const idOfItemToBeDeleted = correspondingTodoListItemNode.dataset.itemId;
             this.deleteTodoItem(idOfItemToBeDeleted);
-            return true;
+            e.stopPropagation();
+        }
+
+        if (e.target.matches('li[data-item-id]')) {
+            const checkboxCorrespondingToThisItem = e.target.querySelector('input[type="checkbox"]');
+            checkboxCorrespondingToThisItem.focus();
         }
     });
 
@@ -144,7 +147,9 @@ TodoList.prototype.init = function() {
                 case 'ArrowLeft':
                     previousTodoCheckbox && previousTodoCheckbox.focus();
                     break;
-            }
+                }
+
+            e.stopPropagation();
         }
     });
 
