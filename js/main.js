@@ -1,5 +1,5 @@
 const CONSTANTS = {
-    todoAnimationDuration: 75,
+    todoAnimationDuration: 3000,
 }
 document.documentElement.style.setProperty('--to-do-animation-duration', `${CONSTANTS.todoAnimationDuration}ms`);
 
@@ -349,7 +349,13 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
 
     Array.prototype.forEach.call(furtherSiblingsOfNodeToBeDeleted, (furtherSiblingOfNodeToBeDeleted) => {
         furtherSiblingOfNodeToBeDeleted.classList.add('animate-move-up');
-        setTimeout(() => { furtherSiblingOfNodeToBeDeleted.classList.remove('animate-move-up'); }, CONSTANTS.todoAnimationDuration);
+        this.$addItemGroup.classList.add('animate-move-up');
+        this.$secondaryButtonsGroup.classList.add('animate-move-up');
+        setTimeout(() => {
+            furtherSiblingOfNodeToBeDeleted.classList.remove('animate-move-up');
+            this.$addItemGroup.classList.remove('animate-move-up');
+            this.$secondaryButtonsGroup.classList.remove('animate-move-up');
+        }, CONSTANTS.todoAnimationDuration);
     });
 
     this.updateUndoDeleteButton();
