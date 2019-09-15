@@ -71,6 +71,7 @@ const TodoList = function($module) {
     this.$secondaryButtonsGroup = this.$module.querySelector('.js-todo-list__secondary-buttons');
     this.$undoDeleteButton = this.$module.querySelector('.js-undo-delete-button');
     this.$clearCompletedButton = this.$module.querySelector('.js-clear-completed-button');
+    this.$liveRegion = this.$module.querySelector('[role="alert"]');
     this._touchEventDetected = undefined;
     this._todoItems = {
         current: [],
@@ -366,6 +367,8 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem, indexOfNewToDoItemI
         this.updateUndoDeleteButton();
         this.updateClearCompletedButton();
     }
+
+    this.$liveRegion.textContent = `Added to do: ${label}`;
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
@@ -377,6 +380,8 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     // it's still impacting the document flow, meaning that the next sibblings need to wait until the element is out to take up their new spot
     // I could have made that happened by animating the next siblings towards a transform upwards (rather than towards transform none), but that's a bit too complicated
     nodeToBeDeleted.remove();
+    const lastDeletedTodo = this._todoItems.deleted[(this._todoItems.deleted.length - 1)];
+    this.$liveRegion.textContent = `Deleted to do: ${lastDeletedTodo.label}`;
 
     Array.prototype.forEach.call(furtherSiblingsOfNodeToBeDeleted, (furtherSiblingOfNodeToBeDeleted) => {
         furtherSiblingOfNodeToBeDeleted.classList.add('animate-move-up');
@@ -392,11 +397,6 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     this.updateUndoDeleteButton();
     this.updateClearCompletedButton();
 }
-
-TodoList.prototype.renderClearCompleted = function() {
-    this.renderAllTodoItems();
-    this.updateClearCompletedButton();
-};
 
 TodoList.prototype.renderToDoItemLabelUpdate = function(todoItemId, newLabel) {
     const nodeToBeUpdated = this.$list.querySelector(`li[data-item-id="${todoItemId}"] .js-todo-delete-button > span`);
