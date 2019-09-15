@@ -1,6 +1,6 @@
 const CONSTANTS = {
     todoAnimationDuration: 75,
-}
+};
 document.documentElement.style.setProperty('--to-do-animation-duration', `${CONSTANTS.todoAnimationDuration}ms`);
 
 const utilities = {
@@ -113,7 +113,6 @@ TodoList.prototype.init = function() {
 
     this.$list.addEventListener('click', (e) => {
         if (e.srcElement.matches('li .js-todo-delete-button, li .js-todo-delete-button > *')) {
-
             // TODO: Refactor
             const correspondingTodoListItemNode = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
             if (!correspondingTodoListItemNode) { return false };
@@ -121,6 +120,31 @@ TodoList.prototype.init = function() {
             const idOfItemToBeDeleted = correspondingTodoListItemNode.dataset.itemId;
             this.deleteTodoItem(idOfItemToBeDeleted);
             return true;
+        }
+    });
+
+    this.$list.addEventListener('keyup', (e) => {
+        if (e.srcElement.matches('li input[type="checkbox"]')) {
+            const idOfCorrespondingTodo = e.srcElement.parentNode.dataset.itemId;
+            const indexOfCorrespondingTodoInArray = this._todoItems.current.findIndex(todoItem => todoItem.id === idOfCorrespondingTodo);
+            const indexOfNextTodoInArray = indexOfCorrespondingTodoInArray < this._todoItems.current.length - 1 ? indexOfCorrespondingTodoInArray + 1 : null;
+            const idOfNextTodoInArray = Number.isFinite(indexOfNextTodoInArray) ? this._todoItems.current[indexOfNextTodoInArray].id : null;
+            const nextTodoCheckbox = idOfNextTodoInArray ? this.$list.querySelector(`li[data-item-id="${idOfNextTodoInArray}"] > input[type="checkbox"]`) : null;
+            
+            const indexOfPreviousTodoInArray = indexOfCorrespondingTodoInArray > 0 ? indexOfCorrespondingTodoInArray - 1 : null;
+            const idOfPreviousTodoInArray = Number.isFinite(indexOfPreviousTodoInArray) ? this._todoItems.current[indexOfPreviousTodoInArray].id : null;
+            const previousTodoCheckbox = idOfPreviousTodoInArray ? this.$list.querySelector(`li[data-item-id="${idOfPreviousTodoInArray}"] > input[type="checkbox"]`) : null;
+            
+            switch (e.code) {
+                case 'ArrowDown':
+                case 'ArrowRight':
+                    nextTodoCheckbox && nextTodoCheckbox.focus();
+                    break;
+                case 'ArrowUp':
+                case 'ArrowLeft':
+                    previousTodoCheckbox && previousTodoCheckbox.focus();
+                    break;
+            }
         }
     });
 
