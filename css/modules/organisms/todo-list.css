@@ -30,15 +30,22 @@
     border-bottom: 1px solid black;
     /* Note: for a transition to apply both way, it needs to be in a ruleset that still applies after the event */
     transition: background-color 200ms ease-in-out;
-    animation: to-do-insertion 2000ms ease-in-out backwards;
+}
+
+.todo-list__item,
+.add-item,
+.todo-list__secondary-buttons {
+    animation: to-do-insertion 200ms ease-in-out backwards;
 }
 
 @keyframes to-do-insertion {
     0% {
         opacity: 0;
+        transform: translate(0, -40%);
     }
     100% {
         opacity: 1;
+        transform: none;
     }
 }
 
