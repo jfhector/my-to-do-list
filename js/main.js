@@ -300,6 +300,7 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem) {
             <img src="assets/bin-icon.svg" draggable="false">
         </button>
     `;
+    newToDoItemElement.classList.add('animate-insertion');
     this.$list.appendChild(newToDoItemElement);
 }
 

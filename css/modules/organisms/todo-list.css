@@ -32,23 +32,6 @@
     transition: background-color 200ms ease-in-out;
 }
 
-.todo-list__item,
-.add-item,
-.todo-list__secondary-buttons {
-    animation: to-do-insertion 200ms ease-in-out backwards;
-}
-
-@keyframes to-do-insertion {
-    0% {
-        opacity: 0;
-        transform: translate(0, -40%);
-    }
-    100% {
-        opacity: 1;
-        transform: none;
-    }
-}
-
 .todo-list__item:focus-within {
     background-color: var(--focus-background-color);
 }

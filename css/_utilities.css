@@ -12,10 +12,44 @@
     padding: 0px !important;
 }
 
-.cluster {
-    margin: -0.5rem;
+.animate-insertion {
+    animation: insertion 75ms ease-out backwards;
+}
+.animate-deletion {
+    animation: insertion 75ms ease-in backwards;
+    animation-direction: reverse;
+}
+@keyframes insertion {
+    0% {
+        opacity: 0;
+        transform: scale(0.98) translate(0, -2rem);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
 }
 
-.cluster > * {
-    margin: 0.5rem;
+.animate-move-down {
+    animation: move-down 75ms ease-in-out backwards;
+}
+@keyframes move-down {
+    0% {
+        transform: translate(0, -2rem);
+    }
+    100% {
+        transform: none;
+    }
+}
+
+.animate-move-up {
+    animation: move-up 75ms ease-in-out backwards;
+}
+@keyframes move-down {
+    0% {
+        transform: translate(0, 2rem);
+    }
+    100% {
+        transform: none;
+    }
 }
