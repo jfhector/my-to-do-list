@@ -81,6 +81,7 @@ TodoList.prototype.init = function() {
     }
 
     this.renderAllTodoItems();
+    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
     
     window.addEventListener('load', () => {
         // given that there hasn't been a touch event at any time
@@ -227,7 +228,7 @@ TodoList.prototype.undoLastTodoDeletion = function() {
         this._todoItems.current.splice(0, 0, lastDeletedTodo);
     }
 
-    this.renderAllTodoItems();
+    this.renderUndoLastTodoDeletion();
     return true;
 };
 
@@ -275,11 +276,13 @@ TodoList.prototype.renderAllTodoItems = function() {
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
     nodeToBeDeleted.remove();
-
-    if (this._todoItems.deleted.length) {
-        this.$undoDeleteButton.hidden = false;
-    }
+    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
 }
+
+TodoList.prototype.renderUndoLastTodoDeletion = function() {
+    this.renderAllTodoItems();
+    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
+};
 
 TodoList.prototype.renderToDoItemLabelUpdate = function(todoItemId, newLabel) {
     const nodeToBeUpdated = this.$list.querySelector(`li[data-item-id="${todoItemId}"] .js-todo-delete-button > span`);
