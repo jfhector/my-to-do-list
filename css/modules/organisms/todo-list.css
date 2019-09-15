@@ -53,33 +53,18 @@
     text-decoration: line-through;
 }
 
-/* If an element has visibility hidden, it can't be clicked/touched on by humans. Beware that an element with opacity 0 can still be touched/clicked */
-/* Note: it looks like, with `animation-fill-mode: forwards`, I can _only_ override the styles of the 100% state, if the ruleset that contains the animation doesn't apply to the element any more*/
+.js-todo-delete-button {
+    transition: opacity 300ms ease-in-out;
+}
+
+/* 
+* If an element has visibility hidden, it can't be clicked/touched on by humans.
+* Beware that an element with opacity 0 can still be touched/clicked.
+* I've chosen not to use `visibility: hidden;` because if I do, the button is taken out of the tab order.
+* Instead, I just use opacity, but the opacity never again reduced if any touch event has been detected on the app, ever, in a browser. (It's stored in localStorage)
+*/
 .todo-list.allow-hiden-buttons .todo-list__item:not(:hover):not(:focus-within) > .js-todo-delete-button {
-    animation: hideButtons 300ms ease-in-out;
-    animation-fill-mode: forwards;
-}
-
-@keyframes hideButtons {
-    0% {
-        opacity: 1;
-    }
-
-    99% {
-        visibility: visible;
-    }
-
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
-.todo-list .todo-list__item:hover > .js-todo-delete-button,
-.todo-list .todo-list__item:focus-within > .js-todo-delete-button {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 200ms ease-in-out;
+    opacity: 0;
 }
 
 .todo-list__item > button > img {
