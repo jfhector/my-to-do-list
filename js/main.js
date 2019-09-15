@@ -185,7 +185,8 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     this._todoItems.current.push(newTodoItem);
     if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
-    this.renderAllTodoItems();
+    // this.renderAllTodoItems();
+    this.renderAddTodoItem(newTodoItem);
     return true;
 }
 
@@ -284,6 +285,22 @@ TodoList.prototype.renderAllTodoItems = function() {
         (accumulator, todoItem) => accumulator + generateTodoItemHTML(todoItem.id, todoItem.label, todoItem.completionState),
         ''
     );
+}
+
+TodoList.prototype.renderAddTodoItem = function(newTodoItem) {
+    const { id, label, completionState } = newTodoItem;
+    const newToDoItemElement = document.createElement('li');
+    newToDoItemElement.classList.add('todo-list__item');
+    newToDoItemElement.dataset.itemId = id;
+    newToDoItemElement.innerHTML = `
+        <input type="checkbox" aria-labelledby="item${id}-checkbox-label" ${completionState === 'done' ? 'checked' : ''}>
+        <span id="item${id}-checkbox-label" role="textbox" contenteditable spellcheck="false">${label}</span>
+        <button type="button" class="button--secondary js-todo-delete-button">
+            <span class="!visually-hidden">Delete to do item named ${label}</span>
+            <img src="assets/bin-icon.svg" draggable="false">
+        </button>
+    `;
+    this.$list.appendChild(newToDoItemElement);
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
