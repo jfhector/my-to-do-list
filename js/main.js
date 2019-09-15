@@ -1,5 +1,5 @@
 const CONSTANTS = {
-    todoAnimationDuration: 3000,
+    todoAnimationDuration: 75,
 }
 document.documentElement.style.setProperty('--to-do-animation-duration', `${CONSTANTS.todoAnimationDuration}ms`);
 

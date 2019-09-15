@@ -30,6 +30,7 @@
     border-bottom: 1px solid black;
     /* Note: for a transition to apply both way, it needs to be in a ruleset that still applies after the event */
     transition: background-color 200ms ease-in-out;
+    will-change: transform;
 }
 
 .todo-list__item:focus-within {
@@ -71,11 +72,16 @@
     height: 1.5rem;
 }
 
+.add-item {
+    will-change: transform;
+}
+
 .todo-list__secondary-buttons {
     margin: -0.5rem;
     display: flex;
     flex-wrap: wrap;
     max-width: calc(44ch + 0.5rem);
+    will-change: transform;
 }
 
 .todo-list__secondary-buttons > * {
