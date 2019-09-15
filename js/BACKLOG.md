@@ -2,8 +2,6 @@
 
 ### Bugs
 
-* When an element doesn't have text. The span is hard to select because it has no witdh
-
 ### Improvements
 
 * If, after 1 minute, there still hasn't been a touch event, then set _registeredTouchEvents to false, and save in storage

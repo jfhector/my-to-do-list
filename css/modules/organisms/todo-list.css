@@ -38,10 +38,10 @@
 
 .todo-list__item > span[id$="-label"] {
     padding: 0.125rem;
-    max-width: calc(100% - 4rem);
+    width: calc(100% - 4.5rem);
     margin-left: 0.5rem;
     margin-right: auto;
-    border-radius: 0.1  25rem;
+    border-radius: 0.125rem;
 }
 
 .todo-list__item > span[id$="-label"]:focus {
