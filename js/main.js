@@ -37,6 +37,7 @@ const utilities = {
         }
     }
 }
+
 function IDGenerator() {
 	 
     this.length = 10;
@@ -190,8 +191,7 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     this._todoItems.current.push(newTodoItem);
     if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
-    // this.renderAllTodoItems();
-    this.renderAddTodoItem(newTodoItem);
+    this.renderAddTodoItem(newTodoItem, this._todoItems.current.length - 1);
     return true;
 }
 
@@ -236,11 +236,12 @@ TodoList.prototype.undoLastTodoDeletion = function() {
     
     if (currentIndexOfNextSiblingItemInArrayBeforeDeletion && currentIndexOfNextSiblingItemInArrayBeforeDeletion !== -1) {
         this._todoItems.current.splice(currentIndexOfNextSiblingItemInArrayBeforeDeletion, 0, lastDeletedTodo);
+        this.renderAddTodoItem(lastDeletedTodo, currentIndexOfNextSiblingItemInArrayBeforeDeletion);
     } else {
         this._todoItems.current.splice(0, 0, lastDeletedTodo);
+        this.renderAddTodoItem(lastDeletedTodo, 0);
     }
 
-    this.renderUndoLastTodoDeletion();
     return true;
 };
 
@@ -273,7 +274,6 @@ TodoList.prototype.updateTodoItemLabel = function(todoItemId, newLabel) {
     return true;
 }
 
-
 TodoList.prototype.renderAllTodoItems = function() {
     const generateTodoItemHTML = (id, label, completionState) => `
         <li class="todo-list__item" data-item-id="${id}">
@@ -292,7 +292,7 @@ TodoList.prototype.renderAllTodoItems = function() {
     );
 }
 
-TodoList.prototype.renderAddTodoItem = function(newTodoItem) {
+TodoList.prototype.renderAddTodoItem = function(newTodoItem, indexOfNewToDoItemInArray) {
     const { id, label, completionState } = newTodoItem;
     const newToDoItemElement = document.createElement('li');
     newToDoItemElement.classList.add('todo-list__item');
@@ -305,10 +305,28 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem) {
             <img src="assets/bin-icon.svg" draggable="false">
         </button>
     `;
+
     newToDoItemElement.classList.add('animate-insertion');
     setTimeout(() => { newToDoItemElement.classList.remove('animate-insertion'); }, CONSTANTS.todoAnimationDuration);
+    
+    if (indexOfNewToDoItemInArray === (this._todoItems.current.length - 1)) {
+        this.$list.appendChild(newToDoItemElement);
+    } else {
+        const indexOfNextTodoInArray = indexOfNewToDoItemInArray + 1;
+        const idOfNextTodoInArray = this._todoItems.current[indexOfNextTodoInArray].id;
+        const nodeOfNextTodoInArray = this.$list.querySelector(`li[data-item-id="${idOfNextTodoInArray}"]`);
+        this.$list.insertBefore(newToDoItemElement, nodeOfNextTodoInArray);
+    
+        const generalSiblingsOfNewItem = this.$list.querySelectorAll(`li[data-item-id="${id}"] ~ *`);
+        
+        Array.prototype.forEach.call(generalSiblingsOfNewItem, (generalSiblingOfNewItem) => {
+            generalSiblingOfNewItem.classList.add('animate-move-down');
+            setTimeout(() => { generalSiblingOfNewItem.classList.remove('animate-move-down'); }, CONSTANTS.todoAnimationDuration);
+        });
 
-    this.$list.appendChild(newToDoItemElement);
+        this.updateUndoDeleteButton();
+        this.updateClearCompletedButton();
+    }
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
@@ -330,12 +348,6 @@ TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     this.updateClearCompletedButton();
 }
 
-TodoList.prototype.renderUndoLastTodoDeletion = function() {
-    this.renderAllTodoItems();
-    this.updateUndoDeleteButton();
-    this.updateClearCompletedButton();
-};
-
 TodoList.prototype.renderClearCompleted = function() {
     this.renderAllTodoItems();
     this.updateClearCompletedButton();
@@ -356,14 +368,7 @@ TodoList.prototype.updateClearCompletedButton = function() {
     this.$clearCompletedButton.textContent = `Clear ${numberOfCompletedTodos > 0 ? `${numberOfCompletedTodos} ` : ''}completed`;
 };
 
-// IN DEV
 const $todoList = document.querySelector('[data-module="todo-list"]');
 const todoList = new TodoList($todoList);
 todoList.init();
 
-// IN PROD
-// const todoListModules = document.querySelectorAll('[data-module="todo-list"]');
-// Array.prototype.forEach.call(todoListModules, $todoListModule => {
-//     const todoListModule = new TodoList($todoListModule);
-//     todoListModule.init();
-// });

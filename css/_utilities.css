@@ -26,37 +26,24 @@
     }
 }
 
-.animate-deletion {
-    animation: deletion var(--to-do-animation-duration) ease-in forwards;
+.animate-move-up {
+    animation: move-up var(--to-do-animation-duration) ease-out backwards;
 }
-@keyframes deletion {
+@keyframes move-up {
     0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
-
-.animate-move-down {
-    animation: move-down var(--to-do-animation-duration) ease-in-out backwards;
-}
-@keyframes move-down {
-    0% {
-        transform: translate(0, -2rem);
+        transform: translate(0, 2rem);
     }
     100% {
         transform: none;
     }
 }
 
-.animate-move-up {
-    animation: move-up var(--to-do-animation-duration) ease-in-out backwards;
+.animate-move-down {
+    animation: move-down var(--to-do-animation-duration) ease-out backwards;
 }
-@keyframes move-up {
+@keyframes move-down {
     0% {
-        transform: translate(0, 2rem);
+        transform: translate(0, -2rem);
     }
     100% {
         transform: none;
