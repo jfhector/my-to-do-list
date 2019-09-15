@@ -82,8 +82,8 @@ TodoList.prototype.init = function() {
     }
 
     this.renderAllTodoItems();
-    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
-    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    this.updateUndoDeleteButton();
+    this.updateClearCompletedButton();
 
     window.addEventListener('load', () => {
         // given that there hasn't been a touch event at any time
@@ -246,7 +246,7 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompl
 
     if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
 
-    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    this.updateClearCompletedButton();
     return true;
 }
 
@@ -289,25 +289,35 @@ TodoList.prototype.renderAllTodoItems = function() {
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
     nodeToBeDeleted.remove();
-    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
-    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    this.updateUndoDeleteButton();
+    this.updateClearCompletedButton();
 }
 
 TodoList.prototype.renderUndoLastTodoDeletion = function() {
     this.renderAllTodoItems();
-    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
-    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    this.updateUndoDeleteButton();
+    this.updateClearCompletedButton();
 };
 
 TodoList.prototype.renderClearCompleted = function() {
     this.renderAllTodoItems();
-    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    this.updateClearCompletedButton();
 };
 
 TodoList.prototype.renderToDoItemLabelUpdate = function(todoItemId, newLabel) {
     const nodeToBeUpdated = this.$list.querySelector(`li[data-item-id="${todoItemId}"] .js-todo-delete-button > span`);
     nodeToBeUpdated.textContent = `Delete to do item named ${newLabel}`
 }
+
+TodoList.prototype.updateUndoDeleteButton = function () {
+    this.$undoDeleteButton.disabled = this._todoItems.deleted.length ? false : true;
+};
+
+TodoList.prototype.updateClearCompletedButton = function() {
+    this.$clearCompletedButton.disabled = !this._todoItems.current.some(todoItem => todoItem.completionState === 'done');
+    const numberOfCompletedTodos = this._todoItems.current.filter(todoItem => todoItem.completionState === 'done').length;
+    this.$clearCompletedButton.textContent = `Clear ${numberOfCompletedTodos > 0 ? `${numberOfCompletedTodos} ` : ''}completed`;
+};
 
 // IN DEV
 const $todoList = document.querySelector('[data-module="todo-list"]');

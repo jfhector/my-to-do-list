@@ -85,3 +85,16 @@
 .todo-list__item > button > img {
     height: 1.5rem;
 }
+
+.todo-list__secondary-buttons {
+    margin: -0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(44ch + 0.5rem);
+}
+
+.todo-list__secondary-buttons > * {
+    margin: 0.5rem;
+    flex-grow: 1;
+    flex-basis: auto;
+}
