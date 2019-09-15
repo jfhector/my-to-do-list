@@ -65,8 +65,10 @@ const idGen = new IDGenerator();
 const TodoList = function($module) {
     this.$module = $module;
     this.$list = this.$module.querySelector('ul'); // Q: Why does this.$list become undefined if I only set it in .init?
+    this.$addItemGroup = this.$module.querySelector('.js-add-item');
     this.$newTodoInput = this.$module.querySelector('#new-todo-input');
     this.$newTodoAddButton = this.$module.querySelector('.js-add-item-button');
+    this.$secondaryButtonsGroup = this.$module.querySelector('.js-todo-list__secondary-buttons');
     this.$undoDeleteButton = this.$module.querySelector('.js-undo-delete-button');
     this.$clearCompletedButton = this.$module.querySelector('.js-clear-completed-button');
     this._touchEventDetected = undefined;
@@ -307,10 +309,17 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem, indexOfNewToDoItemI
     `;
 
     newToDoItemElement.classList.add('animate-insertion');
-    setTimeout(() => { newToDoItemElement.classList.remove('animate-insertion'); }, CONSTANTS.todoAnimationDuration);
+    this.$addItemGroup.classList.add('animate-move-down');
+    this.$secondaryButtonsGroup.classList.add('animate-move-down');
+    setTimeout(() => {
+        newToDoItemElement.classList.remove('animate-insertion');
+        this.$addItemGroup.classList.remove('animate-move-down');
+        this.$secondaryButtonsGroup.classList.remove('animate-move-down');
+    }, CONSTANTS.todoAnimationDuration);
     
     if (indexOfNewToDoItemInArray === (this._todoItems.current.length - 1)) {
         this.$list.appendChild(newToDoItemElement);
+
     } else {
         const indexOfNextTodoInArray = indexOfNewToDoItemInArray + 1;
         const idOfNextTodoInArray = this._todoItems.current[indexOfNextTodoInArray].id;
@@ -318,7 +327,6 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem, indexOfNewToDoItemI
         this.$list.insertBefore(newToDoItemElement, nodeOfNextTodoInArray);
     
         const generalSiblingsOfNewItem = this.$list.querySelectorAll(`li[data-item-id="${id}"] ~ *`);
-        
         Array.prototype.forEach.call(generalSiblingsOfNewItem, (generalSiblingOfNewItem) => {
             generalSiblingOfNewItem.classList.add('animate-move-down');
             setTimeout(() => { generalSiblingOfNewItem.classList.remove('animate-move-down'); }, CONSTANTS.todoAnimationDuration);
