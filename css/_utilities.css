@@ -11,3 +11,11 @@
     border: none !important;
     padding: 0px !important;
 }
+
+.cluster {
+    margin: -0.25rem;
+}
+
+.cluster > * {
+    margin: 0.25rem;
+}
