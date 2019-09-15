@@ -17,3 +17,5 @@
   * OR Refactor as custom elements, which would require using ES6 and hence Babel or typescript
 * Refactor using TypeScript!!!
 * Redo using custom elements
+
+* find a way to set a CSS custom property from JS without using element.style

@@ -1,3 +1,8 @@
+const CONSTANTS = {
+    todoAnimationDuration: 75,
+}
+document.documentElement.style.setProperty('--to-do-animation-duration', `${CONSTANTS.todoAnimationDuration}ms`);
+
 const utilities = {
     findElementUpstream: (startElement, selector) => {
         if (startElement.matches(selector)) {
@@ -301,12 +306,26 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem) {
         </button>
     `;
     newToDoItemElement.classList.add('animate-insertion');
+    setTimeout(() => { newToDoItemElement.classList.remove('animate-insertion'); }, CONSTANTS.todoAnimationDuration);
+
     this.$list.appendChild(newToDoItemElement);
 }
 
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
+    const furtherSiblingsOfNodeToBeDeleted = this.$list.querySelectorAll(`li[data-item-id="${todoItemId}"] ~ *`);
+    
+    // It's simpler to remove the node to be deleted immediately without animation
+    // Because if it stays to be animated with a transform, for as long as it's still in the DOM,
+    // it's still impacting the document flow, meaning that the next sibblings need to wait until the element is out to take up their new spot
+    // I could have made that happened by animating the next siblings towards a transform upwards (rather than towards transform none), but that's a bit too complicated
     nodeToBeDeleted.remove();
+
+    Array.prototype.forEach.call(furtherSiblingsOfNodeToBeDeleted, (furtherSiblingOfNodeToBeDeleted) => {
+        furtherSiblingOfNodeToBeDeleted.classList.add('animate-move-up');
+        setTimeout(() => { furtherSiblingOfNodeToBeDeleted.classList.remove('animate-move-up'); }, CONSTANTS.todoAnimationDuration);
+    });
+
     this.updateUndoDeleteButton();
     this.updateClearCompletedButton();
 }

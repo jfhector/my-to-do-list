@@ -13,11 +13,7 @@
 }
 
 .animate-insertion {
-    animation: insertion 75ms ease-out backwards;
-}
-.animate-deletion {
-    animation: insertion 75ms ease-in backwards;
-    animation-direction: reverse;
+    animation: insertion var(--to-do-animation-duration) ease-out backwards;
 }
 @keyframes insertion {
     0% {
@@ -30,8 +26,21 @@
     }
 }
 
+.animate-deletion {
+    animation: deletion var(--to-do-animation-duration) ease-in forwards;
+}
+@keyframes deletion {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
 .animate-move-down {
-    animation: move-down 75ms ease-in-out backwards;
+    animation: move-down var(--to-do-animation-duration) ease-in-out backwards;
 }
 @keyframes move-down {
     0% {
@@ -43,9 +52,9 @@
 }
 
 .animate-move-up {
-    animation: move-up 75ms ease-in-out backwards;
+    animation: move-up var(--to-do-animation-duration) ease-in-out backwards;
 }
-@keyframes move-down {
+@keyframes move-up {
     0% {
         transform: translate(0, 2rem);
     }
