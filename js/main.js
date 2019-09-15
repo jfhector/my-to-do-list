@@ -61,6 +61,7 @@ const TodoList = function($module) {
     this.$list = this.$module.querySelector('ul'); // Q: Why does this.$list become undefined if I only set it in .init?
     this.$newTodoInput = this.$module.querySelector('#new-todo-input');
     this.$newTodoAddButton = this.$module.querySelector('.js-add-item-button');
+    this.$undoDeleteButton = this.$module.querySelector('.js-undo-delete-button');
     this._touchEventDetected = undefined;
     this._todoItems = {
         current: [],
@@ -107,7 +108,7 @@ TodoList.prototype.init = function() {
             if (!correspondingTodoListItemNode) { return false };
 
             const idOfItemToBeDeleted = correspondingTodoListItemNode.dataset.itemId;
-            this.deleteTodoItem(idOfItemToBeDeleted, correspondingTodoListItemNode);
+            this.deleteTodoItem(idOfItemToBeDeleted);
             return true;
         }
     });
@@ -140,6 +141,10 @@ TodoList.prototype.init = function() {
             return false;
         }
     }
+
+    this.$undoDeleteButton.addEventListener('click', (e) => {
+        this.undoLastTodoDeletion() && e.stopPropagation();
+    });
 
     // Listen for 'input' events
     this.$list.addEventListener('input', (e) => {
@@ -177,14 +182,21 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     return true;
 }
 
-TodoList.prototype.deleteTodoItem = function(todoItemId, correspondingTodoListItemNode) {
-    const nextSiblingNodeBeforeDeletion = correspondingTodoListItemNode.nextElementSibling;
+TodoList.prototype.deleteTodoItem = function(todoItemId) {
+    // Finding the id of the next sibling item in the todo item array
+    let idOfNextSiblingItemInArray;
+    const indexOfToDoItemInArray = this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === todoItemId);
+    if (this._todoItems.current.length > (indexOfToDoItemInArray + 1)) {
+        idOfNextSiblingItemInArray = this._todoItems.current[indexOfToDoItemInArray + 1].id;
+    } else {
+        idOfNextSiblingItemInArray = null;
+    }
 
     this._todoItems.current = this._todoItems.current.filter(todoItem => {
         if (todoItem.id !== todoItemId) {
             return true;
         } else {
-            this._todoItems.deleted.push(Object.assign(todoItem, { nextSiblingNodeBeforeDeletion: nextSiblingNodeBeforeDeletion }));
+            this._todoItems.deleted.push(Object.assign(todoItem, { idOfNextSiblingItemInArray: idOfNextSiblingItemInArray }));
             return false;
         }
     });
@@ -194,6 +206,30 @@ TodoList.prototype.deleteTodoItem = function(todoItemId, correspondingTodoListIt
     this.renderTodoItemDeletion(todoItemId);
     return true;
 }
+
+TodoList.prototype.undoLastTodoDeletion = function() {
+    if (!this._todoItems.deleted.length) { return false; }
+
+    const lastItemAddedToDeletedToDosArray = this._todoItems.deleted.pop();
+    
+    const lastDeletedTodo = {
+        label: lastItemAddedToDeletedToDosArray.label,
+        id: lastItemAddedToDeletedToDosArray.id,
+        completionState: lastItemAddedToDeletedToDosArray.completionState,
+    };
+
+    const idOfNextSiblingItemInArrayBeforeDeletion = lastItemAddedToDeletedToDosArray.idOfNextSiblingItemInArray;
+    const currentIndexOfNextSiblingItemInArrayBeforeDeletion = this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === idOfNextSiblingItemInArrayBeforeDeletion);
+    
+    if (currentIndexOfNextSiblingItemInArrayBeforeDeletion && currentIndexOfNextSiblingItemInArrayBeforeDeletion !== -1) {
+        this._todoItems.current.splice(currentIndexOfNextSiblingItemInArrayBeforeDeletion, 0, lastDeletedTodo);
+    } else {
+        this._todoItems.current.splice(0, 0, lastDeletedTodo);
+    }
+
+    this.renderAllTodoItems();
+    return true;
+};
 
 TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompletionState) {
     
@@ -239,6 +275,10 @@ TodoList.prototype.renderAllTodoItems = function() {
 TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
     const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
     nodeToBeDeleted.remove();
+
+    if (this._todoItems.deleted.length) {
+        this.$undoDeleteButton.hidden = false;
+    }
 }
 
 TodoList.prototype.renderToDoItemLabelUpdate = function(todoItemId, newLabel) {
