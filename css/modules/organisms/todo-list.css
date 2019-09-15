@@ -39,10 +39,20 @@
 
 .todo-list__item > span[id$="-label"] {
     padding: 0.125rem;
-    width: calc(100% - 4.5rem);
+    min-width: 4rem;
     margin-left: 0.5rem;
     margin-right: auto;
     border-radius: 0.125rem;
+    position: relative;
+}
+/* This is to extend the click/touch area for the contenteditable span. Pseudo elements capture clicks/touches for their parent*/
+.todo-list__item > span[id$="-label"]::before {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    bottom: -1rem;
+    left: 0;
+    right: 0;
 }
 
 .todo-list__item > span[id$="-label"]:focus {
