@@ -71,7 +71,7 @@ const TodoList = function($module) {
     this.$secondaryButtonsGroup = this.$module.querySelector('.js-todo-list__secondary-buttons');
     this.$undoDeleteButton = this.$module.querySelector('.js-undo-delete-button');
     this.$clearCompletedButton = this.$module.querySelector('.js-clear-completed-button');
-    this.$liveRegion = this.$module.querySelector('[role="alert"]');
+    this.$liveRegion = this.$module.querySelector('[role="status"]');
     this._touchEventDetected = undefined;
     this._todoItems = {
         current: [],
@@ -413,9 +413,13 @@ TodoList.prototype.renderTodoItemsDeletion = function(arrayOfTodoItemIds) {
         });
     });
 
-    this.$liveRegion.textContent = (arrayOfTodoItemIds.length > 1) ? 
-        `Deleted ${arrayOfTodoItemIds.length} completed to do items.`
-        : `Deleted to do: ${arrayOfTodoItemIds[0].label}.`;
+    if (arrayOfTodoItemIds.length > 1) {
+        this.$liveRegion.textContent = `Deleted ${arrayOfTodoItemIds.length} completed to do items. ${this._todoItems.current.length === 0 ? "To do list empty." : ""}`;    
+    } else {
+        const idOfDeletedTodoItem = arrayOfTodoItemIds[0];
+        const labelOfDeletedTodoItem = this._todoItems.deleted[this._todoItems.deleted.length - 1].label;
+        this.$liveRegion.textContent = `Deleted to do: ${labelOfDeletedTodoItem}. ${this._todoItems.current.length === 0 ? "To do list empty." : ""}`;
+    }
 
     this.updateUndoDeleteButton();
     this.updateClearCompletedButton();

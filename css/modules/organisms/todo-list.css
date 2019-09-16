@@ -1,6 +1,5 @@
 .todo-list > h1 {
     margin: 0;
-    margin-bottom: -1rem;
 }
 
 .todo-list > .stack > ul {
@@ -8,6 +7,10 @@
     padding-left: 0;
     display: flex;
     flex-direction: column;
+}
+
+.todo-list > .stack > ul:empty {
+    margin: 0;
 }
 
 .todo-list__empty-state-panel {
@@ -33,9 +36,9 @@
     will-change: transform;
 }
 
-.todo-list__item:focus-within {
+/* .todo-list__item:focus-within {
     background-color: var(--focus-background-color);
-}
+} */
 
 .todo-list__item > span[id$="-label"] {
     padding: 0.125rem;

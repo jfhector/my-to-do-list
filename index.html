@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta charset="utf-8">
-    <title>My To do List</title>
+    <title>My To Do List</title>
     <link type="text/css" rel="stylesheet" href="./css/main.css">
     <script defer src='https://unpkg.com/focus-within-polyfill/dist/focus-within-polyfill.js'></script>
     <script defer src="js/main.js"></script>
@@ -22,8 +22,8 @@
             </div>
         
             <div class="add-item js-add-item">
-                <label for="new-todo-input" class="!visually-hidden">New to do item</label>
-                <input type="text" id="new-todo-input" aria-describedby="todo-list__empty-state-panel" placeholder="E.g. Buy food" size="1" autocomplete="off">
+                <label for="new-todo-input" class="!visually-hidden">Enter new to do item</label>
+                <input type="text" id="new-todo-input" placeholder="E.g. Buy food" size="1" autocomplete="off">
                 <button type="button" class="js-add-item-button">
                     Add
                     <span class="!visually-hidden">to do item</span>
@@ -35,7 +35,7 @@
                 <button type="button" class="button--secondary js-clear-completed-button" disabled >Clear completed</button>
             </div>
 
-            <div role="alert" class="!visually-hidden"></div>
+            <div role="status" aria-live="polite" class="!visually-hidden"></div>
         </div>
     </section>
 </body>
