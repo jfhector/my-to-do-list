@@ -269,16 +269,17 @@ TodoList.prototype.undoLastTodoDeletion = function() {
     };
 
     const idOfNextSiblingItemInArrayBeforeDeletion = lastItemAddedToDeletedToDosArray.idOfNextSiblingItemInArray;
-    const currentIndexOfNextSiblingItemInArrayBeforeDeletion = this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === idOfNextSiblingItemInArrayBeforeDeletion);
+    const currentIndexOfNextSiblingItemInArrayBeforeDeletion = idOfNextSiblingItemInArrayBeforeDeletion ? this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === idOfNextSiblingItemInArrayBeforeDeletion) : null;
     
     if (currentIndexOfNextSiblingItemInArrayBeforeDeletion && currentIndexOfNextSiblingItemInArrayBeforeDeletion !== -1) {
         this._todoItems.current.splice(currentIndexOfNextSiblingItemInArrayBeforeDeletion, 0, lastDeletedTodo);
         this.renderAddTodoItem(lastDeletedTodo, currentIndexOfNextSiblingItemInArrayBeforeDeletion);
     } else {
-        this._todoItems.current.splice(0, 0, lastDeletedTodo);
-        this.renderAddTodoItem(lastDeletedTodo, 0);
+        this._todoItems.current.push(lastDeletedTodo);
+        this.renderAddTodoItem(lastDeletedTodo, this._todoItems.current.length - 1);
     }
 
+    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
     return true;
 };
 

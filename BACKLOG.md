@@ -2,7 +2,6 @@
 
 ### Bugs
 
-* when I clear several todos using the button, VO only announces the last one. Confusing
 * When I delete a todo by activating the bin button with the keyboard, and i then press shift+tab, I'm skipping one of the items (with VO on in Safari)
 
 ### Improvements
