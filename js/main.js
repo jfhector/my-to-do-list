@@ -388,10 +388,10 @@ TodoList.prototype.renderTodoItemsDeletion = function(arrayOfTodoItemIds) {
         // Else, if the item I'm deleting is the first one in the list
         } else if (nodeToBeDeleted.isEqualNode(this.$list.firstElementChild)) {
             // Focus on the second one in the list (which is about to become the first one)
-            nodeToBeDeleted.nextElementSibling.firstElementChild.focus();
+            nodeToBeDeleted.nextElementSibling.querySelector('input[type="checkbox"]').focus();
         } else {
             // Focus on the previous one in the list
-            nodeToBeDeleted.previousElementSibling.firstElementChild.focus();
+            nodeToBeDeleted.previousElementSibling.querySelector('input[type="checkbox"]').focus();
         }
 
         // It's simpler to remove the node to be deleted immediately without animation

@@ -2,12 +2,9 @@
 
 ### Bugs
 
-* When I delete a todo by activating the bin button with the keyboard, and i then press shift+tab, I'm skipping one of the items (with VO on in Safari)
-
 ### Improvements
 
 * Add drag and drop
-* Add live regions
 
 ### Refactoring
 
