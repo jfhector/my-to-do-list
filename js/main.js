@@ -381,6 +381,19 @@ TodoList.prototype.renderTodoItemsDeletion = function(arrayOfTodoItemIds) {
         const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
         const furtherSiblingsOfNodeToBeDeleted = this.$list.querySelectorAll(`li[data-item-id="${todoItemId}"] ~ *`);
         
+        // If there are no other items in the list
+        if (this.$list.childElementCount === 1) {
+            // Focus on the input
+            this.$newTodoInput.focus();
+        // Else, if the item I'm deleting is the first one in the list
+        } else if (nodeToBeDeleted.isEqualNode(this.$list.firstElementChild)) {
+            // Focus on the second one in the list (which is about to become the first one)
+            nodeToBeDeleted.nextElementSibling.firstElementChild.focus();
+        } else {
+            // Focus on the previous one in the list
+            nodeToBeDeleted.previousElementSibling.firstElementChild.focus();
+        }
+
         // It's simpler to remove the node to be deleted immediately without animation
         // Because if it stays to be animated with a transform, for as long as it's still in the DOM,
         // it's still impacting the document flow, meaning that the next sibblings need to wait until the element is out to take up their new spot
