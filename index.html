@@ -16,14 +16,14 @@
         <div class="stack">
             <ul></ul>
         
-            <div class="todo-list__empty-state-panel">
+            <div class="todo-list__empty-state-panel" id="todo-list__empty-state-panel">
                 Either you've done everything already or there are still things to add to your list.
-                <br>Add your first todo
+                <br>Add your first to do.
             </div>
         
             <div class="add-item js-add-item">
                 <label for="new-todo-input" class="!visually-hidden">New to do item</label>
-                <input type="text" id="new-todo-input" placeholder="E.g. Buy food" size="1" autocomplete="off">
+                <input type="text" id="new-todo-input" aria-describedby="todo-list__empty-state-panel" placeholder="E.g. Buy food" size="1" autocomplete="off">
                 <button type="button" class="js-add-item-button">
                     Add
                     <span class="!visually-hidden">to do item</span>

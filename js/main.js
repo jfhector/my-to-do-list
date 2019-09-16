@@ -117,7 +117,7 @@ TodoList.prototype.init = function() {
             // TODO: Refactor
             const correspondingTodoListItemNode = utilities.findElementUpstream(e.srcElement, 'li[data-item-id]');
             const idOfItemToBeDeleted = correspondingTodoListItemNode.dataset.itemId;
-            this.deleteTodoItem(idOfItemToBeDeleted);
+            this.deleteTodoItems([idOfItemToBeDeleted]);
             e.stopPropagation();
         }
 
@@ -148,7 +148,7 @@ TodoList.prototype.init = function() {
                         previousTodoCheckbox && previousTodoCheckbox.focus();
                         break;
                     case 'Backspace':
-                        this.deleteTodoItem(idOfCorrespondingTodo);
+                        this.deleteTodoItems([idOfCorrespondingTodo]);
                         break;
                 }
 
@@ -229,28 +229,31 @@ TodoList.prototype.addTodoItem = function(todoItemLabel) {
     return true;
 }
 
-TodoList.prototype.deleteTodoItem = function(todoItemId) {
+TodoList.prototype.deleteTodoItems = function(arrayOfTodoItemIds) {
     // Finding the id of the next sibling item in the todo item array
-    let idOfNextSiblingItemInArray;
-    const indexOfToDoItemInArray = this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === todoItemId);
-    if (this._todoItems.current.length > (indexOfToDoItemInArray + 1)) {
-        idOfNextSiblingItemInArray = this._todoItems.current[indexOfToDoItemInArray + 1].id;
-    } else {
-        idOfNextSiblingItemInArray = null;
-    }
 
-    this._todoItems.current = this._todoItems.current.filter(todoItem => {
-        if (todoItem.id !== todoItemId) {
-            return true;
+    arrayOfTodoItemIds.forEach(todoItemId => {
+        let idOfNextSiblingItemInArray;
+        const indexOfToDoItemInArray = this._todoItems.current.findIndex(todoItemInArray => todoItemInArray.id === todoItemId);
+        if (this._todoItems.current.length > (indexOfToDoItemInArray + 1)) {
+            idOfNextSiblingItemInArray = this._todoItems.current[indexOfToDoItemInArray + 1].id;
         } else {
-            this._todoItems.deleted.push(Object.assign(todoItem, { idOfNextSiblingItemInArray: idOfNextSiblingItemInArray }));
-            return false;
+            idOfNextSiblingItemInArray = null;
         }
+    
+        this._todoItems.current = this._todoItems.current.filter(todoItem => {
+            if (todoItem.id !== todoItemId) {
+                return true;
+            } else {
+                this._todoItems.deleted.push(Object.assign(todoItem, { idOfNextSiblingItemInArray: idOfNextSiblingItemInArray }));
+                return false;
+            }
+        });
+    
+        if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
     });
 
-    if (utilities.storageAvailable('localStorage')) { localStorage.setItem('_todoItems', JSON.stringify(this._todoItems)); }
-
-    this.renderTodoItemDeletion(todoItemId);
+    this.renderTodoItemsDeletion(arrayOfTodoItemIds);
     return true;
 }
 
@@ -293,7 +296,8 @@ TodoList.prototype.updateTodoItemCompletionState = function(todoItemId, newCompl
 
 TodoList.prototype.clearCompleted = function() {
     const completedTodoItems = this._todoItems.current.filter(todoItem => todoItem.completionState === 'done');
-    completedTodoItems.forEach(completedTodoItem => this.deleteTodoItem(completedTodoItem.id));
+    const arrayOfCompletedItemsIds = completedTodoItems.map(completedTodoItem => completedTodoItem.id);
+    this.deleteTodoItems(arrayOfCompletedItemsIds);
     return true;
 };
 
@@ -371,28 +375,33 @@ TodoList.prototype.renderAddTodoItem = function(newTodoItem, indexOfNewToDoItemI
     this.$liveRegion.textContent = `Added to do: ${label}`;
 }
 
-TodoList.prototype.renderTodoItemDeletion = function(todoItemId) {
-    const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
-    const furtherSiblingsOfNodeToBeDeleted = this.$list.querySelectorAll(`li[data-item-id="${todoItemId}"] ~ *`);
-    
-    // It's simpler to remove the node to be deleted immediately without animation
-    // Because if it stays to be animated with a transform, for as long as it's still in the DOM,
-    // it's still impacting the document flow, meaning that the next sibblings need to wait until the element is out to take up their new spot
-    // I could have made that happened by animating the next siblings towards a transform upwards (rather than towards transform none), but that's a bit too complicated
-    nodeToBeDeleted.remove();
-    const lastDeletedTodo = this._todoItems.deleted[(this._todoItems.deleted.length - 1)];
-    this.$liveRegion.textContent = `Deleted to do: ${lastDeletedTodo.label}`;
-
-    Array.prototype.forEach.call(furtherSiblingsOfNodeToBeDeleted, (furtherSiblingOfNodeToBeDeleted) => {
-        furtherSiblingOfNodeToBeDeleted.classList.add('animate-move-up');
-        this.$addItemGroup.classList.add('animate-move-up');
-        this.$secondaryButtonsGroup.classList.add('animate-move-up');
-        setTimeout(() => {
-            furtherSiblingOfNodeToBeDeleted.classList.remove('animate-move-up');
-            this.$addItemGroup.classList.remove('animate-move-up');
-            this.$secondaryButtonsGroup.classList.remove('animate-move-up');
-        }, CONSTANTS.todoAnimationDuration);
+TodoList.prototype.renderTodoItemsDeletion = function(arrayOfTodoItemIds) {
+    arrayOfTodoItemIds.forEach(todoItemId => {
+        const nodeToBeDeleted = this.$list.querySelector(`li[data-item-id="${todoItemId}"]`);
+        const furtherSiblingsOfNodeToBeDeleted = this.$list.querySelectorAll(`li[data-item-id="${todoItemId}"] ~ *`);
+        
+        // It's simpler to remove the node to be deleted immediately without animation
+        // Because if it stays to be animated with a transform, for as long as it's still in the DOM,
+        // it's still impacting the document flow, meaning that the next sibblings need to wait until the element is out to take up their new spot
+        // I could have made that happened by animating the next siblings towards a transform upwards (rather than towards transform none), but that's a bit too complicated
+        nodeToBeDeleted.remove();
+        const lastDeletedTodo = this._todoItems.deleted[(this._todoItems.deleted.length - 1)];
+        
+        Array.prototype.forEach.call(furtherSiblingsOfNodeToBeDeleted, (furtherSiblingOfNodeToBeDeleted) => {
+            furtherSiblingOfNodeToBeDeleted.classList.add('animate-move-up');
+            this.$addItemGroup.classList.add('animate-move-up');
+            this.$secondaryButtonsGroup.classList.add('animate-move-up');
+            setTimeout(() => {
+                furtherSiblingOfNodeToBeDeleted.classList.remove('animate-move-up');
+                this.$addItemGroup.classList.remove('animate-move-up');
+                this.$secondaryButtonsGroup.classList.remove('animate-move-up');
+            }, CONSTANTS.todoAnimationDuration);
+        });
     });
+
+    this.$liveRegion.textContent = (arrayOfTodoItemIds.length > 1) ? 
+        `Deleted ${arrayOfTodoItemIds.length} completed to do items.`
+        : `Deleted to do: ${arrayOfTodoItemIds[0].label}.`;
 
     this.updateUndoDeleteButton();
     this.updateClearCompletedButton();
