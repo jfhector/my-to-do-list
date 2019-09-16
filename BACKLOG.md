@@ -20,3 +20,6 @@
 * find a way to set a CSS custom property from JS without using element.style
 
 * refactor this.$list.addEventListener('keyup', using try {}
+
+* Use custom events for deletion (and maybe addition) holding data about what needs to be added (or deleted), using CustomEvent. E.g. instead of "user has clicked on a delete butter, it corresponds to this id", I could get "there has been a delete event for item of this id". How would this be implemented? What sort of efficiencies does this get me? See Inclusive Components p155.
+* 
