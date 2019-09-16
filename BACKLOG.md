@@ -2,6 +2,8 @@
 
 ### Bugs
 
+* If I delete the last item using the keyboard, the focus moves back to the input and presses enter on that
+
 ### Improvements
 
 * Add drag and drop

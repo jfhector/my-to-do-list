@@ -384,7 +384,10 @@ TodoList.prototype.renderTodoItemsDeletion = function(arrayOfTodoItemIds) {
         // If there are no other items in the list
         if (this.$list.childElementCount === 1) {
             // Focus on the input
-            this.$newTodoInput.focus();
+            setTimeout(() => {
+                // If I don't use a timeout, the 'enter' keyup event gets somehow handled by the input field as well! Adding a timeout solves this
+                this.$newTodoInput.focus();
+            }, 300);
         // Else, if the item I'm deleting is the first one in the list
         } else if (nodeToBeDeleted.isEqualNode(this.$list.firstElementChild)) {
             // Focus on the second one in the list (which is about to become the first one)
