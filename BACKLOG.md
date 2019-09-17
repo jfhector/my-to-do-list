@@ -22,3 +22,6 @@
 * refactor this.$list.addEventListener('keyup', using try {}
 
 * Use custom events for deletion (and maybe addition) holding data about what needs to be added (or deleted), using CustomEvent. E.g. instead of "user has clicked on a delete butter, it corresponds to this id", I could get "there has been a delete event for item of this id". How would this be implemented? What sort of efficiencies does this get me? See Inclusive Components p155. Functions that handle model updates should not need to know anything about the view or how the markup is laid out. The views/markup should be able to change without impacting the model update funtions.
+
+* Could I use 'Window: animationend event' instead of setTimeOut to remove animation classes?
+* Change language to 'Delete 3 completed' (visually and for SR)
