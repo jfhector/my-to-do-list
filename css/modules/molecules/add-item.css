@@ -1,5 +1,6 @@
 .add-item {
     margin: -0.25rem;
+    margin-top: 1rem;
     max-width: 44ch;
     display: flex;
 }
